@@ -5,10 +5,10 @@ import (
 	"net/http"
 )
 
-func StartFileServer(lhost string, lport string) {
+func StartFileServer(lhost string, lport string, binDir string) {
 	mux := http.NewServeMux()
 
-	fileServer := http.FileServer(http.Dir("./bin/"))
+	fileServer := http.FileServer(http.Dir(binDir))
 	mux.Handle("/bin/", http.StripPrefix("/bin", fileServer))
 
 	fmt.Println("Starting bin file server on 0.0.0.0:4456")

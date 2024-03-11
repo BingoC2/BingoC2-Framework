@@ -19,6 +19,7 @@ func main() {
 	var lhost *string = parser.String("l", "lhost", &argparse.Options{Required: false, Help: "address to listen on", Default: "0.0.0.0"})
 	var lport *string = parser.String("p", "lport", &argparse.Options{Required: false, Help: "port to listen on", Default: "4455"})
 	var flport *string = parser.String("f", "flport", &argparse.Options{Required: false, Help: "port for fileserver to listen on", Default: "4456"})
+	var binDir *string = parser.String("d", "bindir", &argparse.Options{Required: true, Help: "default path to generate agents to"})
 
 	// parse arguments
 	err := parser.Parse(os.Args)
@@ -31,7 +32,7 @@ func main() {
 	startup.Startup()
 
 	// start beacon file server
-	go startup.StartFileServer(*lhost, *flport)
+	go startup.StartFileServer(*lhost, *flport, *binDir)
 
 	// print startup banner
 	startup.Banner()
