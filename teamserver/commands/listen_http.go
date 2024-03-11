@@ -14,11 +14,11 @@ import (
 
 	bingo_errors "github.com/bingoc2/bingoc2-framework/teamserver/errors"
 	grumble "github.com/bingoc2/bingoc2-framework/teamserver/grumble_modified"
+	"github.com/bingoc2/bingoc2-framework/teamserver/hellsgopher"
 	"github.com/bingoc2/bingoc2-framework/teamserver/logging"
 	"github.com/bingoc2/bingoc2-framework/teamserver/management"
 	"github.com/bingoc2/bingoc2-framework/teamserver/version"
 	yamlstructs "github.com/bingoc2/bingoc2-framework/teamserver/yaml_structs"
-	"github.com/deranged0tter/hellsgopher"
 	"github.com/gorilla/mux"
 	"gopkg.in/yaml.v3"
 )
