@@ -4,11 +4,11 @@ import "os"
 
 // checks if data directory exists, if it doesn't create data dirs
 func Startup() {
-	if !checkIfDirExist("../_data") {
-		createDir("../_data")
-		createDir("../_data/listeners")
-		createDir("../_data/sessions")
-		createDir("../_data/beacons")
+	if !checkIfDirExist("./_data") {
+		createDir("./_data")
+		createDir("./_data/listeners")
+		createDir("./_data/sessions")
+		createDir("./_data/beacons")
 	}
 }
 
