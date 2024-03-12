@@ -203,7 +203,5 @@ func handleForward(conn net.Conn, rhost string, rport string) {
 }
 
 func forward(src, dest net.Conn) {
-	defer src.Close()
-	defer dest.Close()
 	io.Copy(src, dest)
 }
