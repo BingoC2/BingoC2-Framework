@@ -16,6 +16,7 @@ To get started, clone the repository and compile from source. See the [wiki](git
 - Compile Time Obfuscation
 - BOF Support
 - Staged Payloads
+- Linux Payloads
 - Advanced Windows Evasion Techniques (e.g. process migration, injection, token manipulation, etc.)
 - Working Hours
 - Kill Date
