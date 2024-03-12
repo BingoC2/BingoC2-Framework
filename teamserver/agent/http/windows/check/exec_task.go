@@ -141,7 +141,6 @@ func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string,
 						default:
 							client, _ := s.Accept()
 							go handleForward(client, rhost, rport)
-							defer s.Close()
 						}
 					}
 				}(forwarder, rhost, rport)
