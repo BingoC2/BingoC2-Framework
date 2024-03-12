@@ -33,7 +33,7 @@ func StartFileServer(lhost string) {
 	fileServer := http.FileServer(http.Dir("./files"))
 	mux.Handle("/files/", http.StripPrefix("/files", fileServer))
 
-	fmt.Println("Starting loot file server on 0.0.0.0:4458")
+	fmt.Println("Starting file server on 0.0.0.0:4458")
 
 	http.ListenAndServe("0.0.0.0:4458", mux)
 }

