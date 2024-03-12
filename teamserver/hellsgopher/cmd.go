@@ -6,15 +6,15 @@ import (
 )
 
 // will run a command with either `bash -c` or `cmd /C` and will provide no output
-func CmdNoOut(command string) {
+func CmdReturn(command string) ([]byte, error) {
 	var cmd *exec.Cmd
 	if runtime.GOOS == "linux" {
 		cmd = exec.Command("bash", "-c", command)
 	} else if runtime.GOOS == "windows" {
 		cmd = exec.Command("cmd", "/C", command)
 	} else {
-		return
+		return nil, nil
 	}
 
-	cmd.CombinedOutput()
+	return cmd.CombinedOutput()
 }

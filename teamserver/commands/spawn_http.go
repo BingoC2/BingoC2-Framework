@@ -1,8 +1,10 @@
 package commands
 
 import (
+	"encoding/binary"
 	"fmt"
 	"os"
+	"strconv"
 
 	bingo_errors "github.com/bingoc2/bingoc2-framework/teamserver/errors"
 	grumble "github.com/bingoc2/bingoc2-framework/teamserver/grumble_modified"
@@ -99,7 +101,14 @@ func SpawnHTTP(c *grumble.Context) error {
 	if opsys == "windows" {
 		name += ".exe"
 	}
-	hellsgopher.CmdNoOut(fmt.Sprintf("make -C ./agents/%s/http/ BEACON_NAME=%s KEY=%s sSLEEP=%d sJITTER=%d RHOST=%s RPORT=%s LISTENER_NAME=%s USERAGENT=%s URI=%s BINARY_NAME=%s cGOOS=%s cGOARCH=%s SPAWN_PATH=%s", name, key, opsys, sleep, jitter, RHOST, RPORT, listener, useragent, URI, name, opsys, arch, path))
+
+	nKey := binary.BigEndian.Uint64(key)
+	sKey := strconv.FormatUint(nKey, 10)
+	fmt.Println(sKey)
+	output, err := hellsgopher.CmdReturn(fmt.Sprintf("make -C ./agent/http/%s/ BEACON_NAME=%s KEY=\"%s\" sSLEEP=%d sJITTER=%d RHOST=%s RPORT=%s LISTENER_NAME=%s USERAGENT=%s URI=%s BINARY_NAME=%s cGOOS=%s cGOARCH=%s SPAWN_PATH=%s", opsys, name, sKey, sleep, jitter, RHOST, RPORT, listener, useragent, URI, name, opsys, arch, path))
+
+	fmt.Println("Output: ", string(output))
+	fmt.Println("Error: ", err)
 
 	logging.Okay(fmt.Sprintf("Successfully generated beacon (%s)", name), c)
 
