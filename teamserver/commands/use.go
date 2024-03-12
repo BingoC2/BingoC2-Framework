@@ -3,10 +3,12 @@ package commands
 import (
 	"fmt"
 	"os"
+	"path"
 	"time"
 
 	bingo_errors "github.com/bingoc2/bingoc2-framework/teamserver/errors"
 	grumble "github.com/bingoc2/bingoc2-framework/teamserver/grumble_modified"
+	"github.com/bingoc2/bingoc2-framework/teamserver/hellsgopher"
 	"github.com/bingoc2/bingoc2-framework/teamserver/version"
 	yamlstructs "github.com/bingoc2/bingoc2-framework/teamserver/yaml_structs"
 	"gopkg.in/yaml.v3"
@@ -121,8 +123,15 @@ func RegisterNewCommands(c *grumble.Context, agentid string) {
 	c.App.AddCommand(&grumble.Command{
 		Name: "upload",
 		Help: "upload file from teamserver to target",
+		Args: func(a *grumble.Args) {
+			a.String("uPath", "path to file to upload")
+			a.String("dPath", "path to upload file to on target")
+		},
 		Run: func(c *grumble.Context) error {
-			return nil
+			// move file to ./files dir
+			hellsgopher.CopyFile(c.Args.String("uPath"), "./files/"+path.Base(c.Args.String("uPath")))
+
+			return SendTask(agentid, "upload", path.Base(c.Args.String("uPath"))+" "+c.Args.String("dPath"))
 		},
 	})
 
@@ -143,7 +152,7 @@ func RegisterNewCommands(c *grumble.Context, agentid string) {
 		Help:    "list contents of directory",
 		Aliases: []string{"dir"},
 		Args: func(a *grumble.Args) {
-			a.String("path", "dir to read")
+			a.String("path", "dir to read", grumble.Default("./"))
 		},
 		Run: func(c *grumble.Context) error {
 			return SendTask(agentid, "ls", c.Args.String("path"))

