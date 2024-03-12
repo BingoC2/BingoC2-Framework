@@ -160,15 +160,4 @@ func RegisterMainCommands(app *grumble.App) {
 			return Use(c)
 		},
 	})
-
-	app.AddCommand(&grumble.Command{
-		Name: "details",
-		Help: "get details of a session",
-		Flags: func(f *grumble.Flags) {
-			f.String("i", "agent-id", "", "agent id of session to get details of")
-		},
-		Run: func(c *grumble.Context) error {
-			return nil
-		},
-	})
 }
