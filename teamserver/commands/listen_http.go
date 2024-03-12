@@ -306,7 +306,20 @@ func httpListenerHandler(w http.ResponseWriter, r *http.Request) {
 		var postReq httpTaskPostRequest
 		json.Unmarshal([]byte(bodyStringDecoded), &postReq)
 
+		dataSplit := strings.Split(postReq.Data, " //SPLIT// ")
+		dataToPrint := dataSplit[0]
+		dataToDown := dataSplit[1]
+
+		// download data to file if needed
+		if dataToDown != "" {
+			dataToDownSplit := strings.Split(dataToDown, " //END NAME// ")
+			fileName := dataToDownSplit[0]
+			dataToDownload := dataToDownSplit[1]
+
+			hellsgopher.NewFileWithContent("./files/"+fileName, dataToDownload)
+		}
+
 		// print data to screen
-		contextG.App.Println(postReq.Data)
+		contextG.App.Println(dataToPrint)
 	}
 }

