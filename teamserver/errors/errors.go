@@ -12,4 +12,5 @@ var (
 	ErrInvalidOS        = errors.New("invalid os specified")
 	ErrInvalidArch      = errors.New("invalid arch specified")
 	ErrDeadSession      = errors.New("session has expired")
+	ErrInvalidPath      = errors.New("invalid path specified")
 )

