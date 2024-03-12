@@ -8,6 +8,11 @@ require (
 )
 
 require (
+	github.com/BurntSushi/xgb v0.0.0-20210121224620-deaf085860bc // indirect
+	github.com/vova616/screenshot v0.0.0-20220801010501-56c10359473c // indirect
+)
+
+require (
 	github.com/Binject/debug v0.0.0-20230508195519-26db73212a7a // indirect
 	github.com/fourcorelabs/wintoken v1.0.0 // indirect
 	github.com/go-ping/ping v1.1.0 // indirect

