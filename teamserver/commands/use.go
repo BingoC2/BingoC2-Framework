@@ -250,11 +250,11 @@ func RegisterNewCommands(c *grumble.Context, agentid string) {
 	portFwdCmd.AddCommand(&grumble.Command{
 		Name: "del",
 		Help: "delete port forwarding rule",
-		Flags: func(f *grumble.Flags) {
-			f.String("i", "id", "", "id of the port fowarding rule")
+		Args: func(a *grumble.Args) {
+			a.String("id", "id of port forwarding rule")
 		},
 		Run: func(c *grumble.Context) error {
-			id := c.Flags.String("id")
+			id := c.Args.String("id")
 			return SendTask(agentid, "portfwd", "del / "+id)
 		},
 	})

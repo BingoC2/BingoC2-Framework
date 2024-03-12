@@ -136,10 +136,12 @@ func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string,
 					for {
 						select {
 						case <-quit:
+							s.Close()
 							return
 						default:
 							client, _ := s.Accept()
 							go handleForward(client, rhost, rport)
+							defer s.Close()
 						}
 					}
 				}(forwarder, rhost, rport)
@@ -156,15 +158,14 @@ func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string,
 				}
 
 				PortFwdListenerQuitMap[intId] <- false
-				PortFwdListenerMap[intId].Close()
 				PortFwdMap[intId] = PortFwdMap[intId] + " (killed)"
 			} else if strings.HasPrefix(taskData, "list") {
 				for key, value := range PortFwdMap {
 					data += fmt.Sprintf("[%d] %s\n", key, value)
 				}
 			} else if strings.HasPrefix(taskData, "clear") {
-				for key, value := range PortFwdListenerMap {
-					value.Close()
+				for key, _ := range PortFwdListenerMap {
+					PortFwdListenerQuitMap[key] <- false
 					PortFwdMap[key] = PortFwdMap[key] + " (killed)"
 				}
 			}
