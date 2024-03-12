@@ -28,3 +28,4 @@ To get started, clone the repository and compile from source. See the [wiki](htt
 - Easier Buidling
 - Integration with Metasploit
 - DLL Payloads
+- Host fake webpages
