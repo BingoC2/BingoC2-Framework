@@ -34,7 +34,6 @@ func CheckIn(rhost string, rport string, uri string, sleep *int, jitter int, lis
 	}
 
 	sBody := string(bBody)
-	fmt.Println(sBody)
 
 	// check for tasks
 	if sBody != "ack check" {

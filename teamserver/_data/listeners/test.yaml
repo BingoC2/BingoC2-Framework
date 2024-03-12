@@ -1,0 +1,6 @@
+channel: http
+name: test
+lhost: 192.168.1.79
+lport: "80"
+uri: index.php
+isalive: true
