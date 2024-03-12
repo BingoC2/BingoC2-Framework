@@ -84,7 +84,7 @@ func ListBeacons(c *grumble.Context) error {
 	outptuBuffer := bytes.NewBufferString("")
 	writer := tabwriter.NewWriter(outptuBuffer, 0, 0, 1, ' ', 0)
 	for key := range beaconNames {
-		fmt.Fprintln(writer, beaconNames[key]+"\t"+sleepSlice[key]+"\t"+jitterSlice[key]+"\t"+listenerSlice[key]+"\t"+opsysSlice[key]+"\t"+archSlice[key])
+		fmt.Fprintln(writer, beaconNames[key]+"\t"+sleepSlice[key]+"\t"+jitterSlice[key]+"%\t"+listenerSlice[key]+"\t"+opsysSlice[key]+"\t"+archSlice[key])
 	}
 	writer.Flush()
 	c.App.Println(outptuBuffer)
