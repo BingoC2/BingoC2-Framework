@@ -67,7 +67,7 @@ func RegisterMainCommands(app *grumble.App) {
 			f.String("l", "listener", "", "name of the listener")
 			f.String("r", "rhost", "", "host to callback to; if left empty, will default to host specified in listener (does not work if listener is 0.0.0.0) (ex: domain.com)")
 			f.Int("s", "sleep", 5, "interval between callbacks")
-			f.Int("j", "jitter", 25, "range of random intervals for call back; given as a percent (i.e. sleep of 5 and jitter of 20 would mean call back between 4 and 6 seconds since 20% of 5 is 1)")
+			f.Int("j", "jitter", 2, "range of random intervals for callback (ex: sleep is 5 and jitter is 2, beacon will callback between 3 and 7 seconds)")
 			f.String("o", "os", "windows", "operating system to compile beacon for (supports: windows, linux)")
 			f.String("a", "arch", "amd64", "architecture to compile beacon for (amd64, i386)")
 			f.String("u", "user-agent", "bingoc2/1.0", "user agent for agents to use")

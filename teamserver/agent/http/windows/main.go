@@ -63,12 +63,10 @@ func main() {
 		os.Exit(1)
 	}
 
-	jitterTime := sleep * JITTER / 100
-
 	// create ticker for callbacks with sleep and jitter
 	ticker := jitterbug.New(
 		time.Second*time.Duration(sleep),
-		&jitterbug.Norm{Stdev: time.Second * time.Duration(jitterTime)},
+		&jitterbug.Norm{Stdev: time.Second * time.Duration(JITTER)},
 	)
 
 	// checkin with server based on ticker
