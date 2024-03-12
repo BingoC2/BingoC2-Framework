@@ -81,6 +81,7 @@ type BeaconDataYaml struct {
 	Sleep     int    `yaml:"sleep"`
 	Jitter    int    `yaml:"jitter"`
 	Listener  string `yaml:"listener"`
+	RHOST     string `yaml:"rhost"`
 	UserAgent string `yaml:"useragent"`
 	GOOS      string `yaml:"goos"`
 	GOARCH    string `yaml:"goarch"`

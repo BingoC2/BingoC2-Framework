@@ -97,11 +97,11 @@ func RegisterMainCommands(app *grumble.App) {
 		Name:    "respawn",
 		Help:    "respawn a beacon",
 		Aliases: []string{"r"},
-		Flags: func(f *grumble.Flags) {
-			f.String("n", "name", "", "name of beacon to respawn")
+		Args: func(a *grumble.Args) {
+			a.String("name", "name of agent to respawn")
 		},
 		Run: func(c *grumble.Context) error {
-			return nil
+			return Respawn(c)
 		},
 	})
 

