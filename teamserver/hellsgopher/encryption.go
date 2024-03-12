@@ -4,37 +4,41 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	cr "crypto/rand"
-	"encoding/binary"
+	"encoding/base64"
+	"errors"
 )
 
-// decrypt []byte with given key
-func DecryptBytes(message []byte, key []byte) ([]byte, error) {
-	iv := message[0:16]
-	cText := message[16:]
+func DecryptString(key []byte, secure string) (decoded string, err error) {
+	//Remove base64 encoding:
+	cipherText, err := base64.RawStdEncoding.DecodeString(secure)
 
-	cipherBlock, err := aes.NewCipher(key)
+	//IF DecodeString failed, exit:
 	if err != nil {
-		return nil, err
+		return
 	}
 
-	c := cipher.NewCBCDecrypter(cipherBlock, iv)
-	d := make([]byte, len(cText))
-	c.CryptBlocks(d, cText)
+	//Create a new AES cipher with the key and encrypted message
+	block, err := aes.NewCipher(key)
 
-	lenBytes := d[0:4]
-	len := binary.LittleEndian.Uint32(lenBytes)
-	d = d[4:]
-	return d[:len], nil
-}
-
-// return a decrypted string using given key
-func DecryptString(s string, key []byte) (string, error) {
-	d, err := DecryptBytes([]byte(s), key)
+	//IF NewCipher failed, exit:
 	if err != nil {
-		return "", err
+		return
 	}
 
-	return string(d), nil
+	//IF the length of the cipherText is less than 16 Bytes:
+	if len(cipherText) < aes.BlockSize {
+		err = errors.New("ciphertext block size is too short")
+		return
+	}
+
+	iv := cipherText[:aes.BlockSize]
+	cipherText = cipherText[aes.BlockSize:]
+
+	//Decrypt the message
+	stream := cipher.NewCFBDecrypter(block, iv)
+	stream.XORKeyStream(cipherText, cipherText)
+
+	return string(cipherText), err
 }
 
 // generate a secure []byte of length l

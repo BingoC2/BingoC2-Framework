@@ -49,7 +49,7 @@ type SessionDataYaml struct {
 	ProcessName     string    `yaml:"processname"`
 	ProcessID       int       `yaml:"pid"`
 	ParentProcessID int       `yaml:"ppid"`
-	ProcessUser     string    `yaml:"processuser"`
+	Username        string    `yaml:"username"`
 	OperatingSystem string    `yaml:"os"`
 	Sleep           int       `yaml:"sleep"`
 	Jitter          int       `yaml:"jitter"`

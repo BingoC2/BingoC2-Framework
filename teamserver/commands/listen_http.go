@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 
 	bingo_errors "github.com/bingoc2/bingoc2-framework/teamserver/errors"
@@ -30,12 +31,12 @@ type httpPostInitRequest struct {
 	Hostname        string   `json:"hostname"`
 	IP              string   `json:"ip"`
 	Interfaces      []string `json:"interfaces"`
-	PWD             string   `json:"pwd"`
 	ProcessPath     string   `json:"processpath"`
+	PWD             string   `json:"pwd"`
 	ProcessName     string   `json:"processname"`
 	ProcessID       int      `json:"pid"`
 	ParentProcessID int      `json:"ppid"`
-	ProcessUser     string   `json:"processuser"`
+	Username        string   `json:"username"`
 	OperatingSystem string   `json:"os"`
 	Sleep           int      `json:"sleep"`
 	Jitter          int      `json:"json"`
@@ -156,7 +157,14 @@ func httpListenerHandler(w http.ResponseWriter, r *http.Request) {
 	agentID := r.Header.Get("AgentID")
 	beaconName := r.Header.Get("Name")
 
+	// strip .exe from beacon name
+	if strings.Contains(beaconName, ".exe") {
+		beaconNameSplit := strings.Split(beaconName, ".")
+		beaconName = beaconNameSplit[0]
+	}
+
 	if callType == "Init" {
+		fmt.Println(beaconName)
 		// pull key from beacon name
 		beaconData, err := yamlstructs.ReadBeaconYaml(beaconName)
 		if err != nil {
@@ -164,21 +172,24 @@ func httpListenerHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		key := beaconData.Key
+		fmt.Println(key)
 
 		// decrypt message
 		bodyBytesEncoded, err := io.ReadAll(r.Body)
 		if err != nil {
+			fmt.Println(err.Error())
 			return
 		}
 
-		bodyStringDecoded, err := hellsgopher.DecryptString(string(bodyBytesEncoded), key)
+		bodyStringDecoded, err := hellsgopher.DecryptString(key, string(bodyBytesEncoded))
 		if err != nil {
 			return
 		}
 
 		// read post request json
 		var postReq httpPostInitRequest
-		json.Unmarshal([]byte(bodyStringDecoded), &postReq)
+		err = json.Unmarshal([]byte(bodyStringDecoded), &postReq)
+		fmt.Println("JSON ERROR:", err)
 
 		agentName := management.GenerateName()
 
@@ -196,7 +207,7 @@ func httpListenerHandler(w http.ResponseWriter, r *http.Request) {
 			ProcessName:     postReq.ProcessName,
 			ProcessID:       postReq.ProcessID,
 			ParentProcessID: postReq.ParentProcessID,
-			ProcessUser:     postReq.ProcessUser,
+			Username:        postReq.Username,
 			OperatingSystem: postReq.OperatingSystem,
 			Sleep:           postReq.Sleep,
 			Jitter:          postReq.Jitter,
@@ -242,7 +253,7 @@ func httpListenerHandler(w http.ResponseWriter, r *http.Request) {
 					ProcessName:     data.ProcessName,
 					ProcessID:       data.ProcessID,
 					ParentProcessID: data.ParentProcessID,
-					ProcessUser:     data.ProcessUser,
+					Username:        data.Username,
 					OperatingSystem: data.OperatingSystem,
 					Sleep:           iSleep,
 					Jitter:          data.Jitter,
@@ -289,7 +300,7 @@ func httpListenerHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		bodyStringDecoded, err := hellsgopher.DecryptString(string(bodyBytesEncoded), key)
+		bodyStringDecoded, err := hellsgopher.DecryptString(key, string(bodyBytesEncoded))
 		if err != nil {
 			return
 		}
@@ -299,7 +310,6 @@ func httpListenerHandler(w http.ResponseWriter, r *http.Request) {
 		json.Unmarshal([]byte(bodyStringDecoded), &postReq)
 
 		// print data to screen
-		logging.Okay(fmt.Sprintf("From %s:%s", agentID, postReq.Data), contextG)
-
+		logging.Okay(postReq.Data, contextG)
 	}
 }

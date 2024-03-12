@@ -11,4 +11,5 @@ var (
 	ErrInvalidListener  = errors.New("invalid listener")
 	ErrInvalidOS        = errors.New("invalid os specified")
 	ErrInvalidArch      = errors.New("invalid arch specified")
+	ErrDeadSession      = errors.New("session has expired")
 )
