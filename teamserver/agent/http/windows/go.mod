@@ -5,12 +5,10 @@ go 1.20
 require (
 	github.com/deranged0tter/hellsgopher v0.2.2
 	github.com/lthibault/jitterbug v2.0.0+incompatible
+	github.com/vova616/screenshot v0.0.0-20220801010501-56c10359473c
 )
 
-require (
-	github.com/BurntSushi/xgb v0.0.0-20210121224620-deaf085860bc // indirect
-	github.com/vova616/screenshot v0.0.0-20220801010501-56c10359473c // indirect
-)
+require github.com/BurntSushi/xgb v0.0.0-20210121224620-deaf085860bc // indirect
 
 require (
 	github.com/Binject/debug v0.0.0-20230508195519-26db73212a7a // indirect

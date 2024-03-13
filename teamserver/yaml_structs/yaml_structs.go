@@ -50,10 +50,15 @@ type SessionDataYaml struct {
 	ProcessID       int       `yaml:"pid"`
 	ParentProcessID int       `yaml:"ppid"`
 	Username        string    `yaml:"username"`
+	UID             string    `yaml:"uid"`
+	GID             string    `yaml:"gid"`
 	OperatingSystem string    `yaml:"os"`
+	OSVersion       string    `yaml:"version"`
+	OSBuild         string    `yaml:"build"`
 	Sleep           int       `yaml:"sleep"`
 	Jitter          int       `yaml:"jitter"`
 	Listener        string    `yaml:"listener"`
+	FirstContact    time.Time `yaml:"firstcontact"`
 	LastCallBack    time.Time `yaml:"lastcallback"`
 	Tasks           []string  `yaml:"tasks"`
 }

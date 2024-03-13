@@ -37,7 +37,11 @@ type httpPostInitRequest struct {
 	ProcessID       int      `json:"pid"`
 	ParentProcessID int      `json:"ppid"`
 	Username        string   `json:"username"`
+	UID             string   `json:"uid"`
+	GID             string   `json:"gid"`
 	OperatingSystem string   `json:"os"`
+	OSVersion       string   `json:"version"`
+	OSBuild         string   `json:"build"`
 	Sleep           int      `json:"sleep"`
 	Jitter          int      `json:"json"`
 	Listener        string   `json:"listener"`
@@ -208,10 +212,13 @@ func httpListenerHandler(w http.ResponseWriter, r *http.Request) {
 			ProcessID:       postReq.ProcessID,
 			ParentProcessID: postReq.ParentProcessID,
 			Username:        postReq.Username,
+			UID:             postReq.UID,
+			GID:             postReq.GID,
 			OperatingSystem: postReq.OperatingSystem,
 			Sleep:           postReq.Sleep,
 			Jitter:          postReq.Jitter,
 			Listener:        postReq.Listener,
+			FirstContact:    time.Now(),
 			LastCallBack:    time.Now(),
 			Tasks:           nil,
 		}
@@ -251,10 +258,13 @@ func httpListenerHandler(w http.ResponseWriter, r *http.Request) {
 				ProcessID:       data.ProcessID,
 				ParentProcessID: data.ParentProcessID,
 				Username:        data.Username,
+				UID:             data.UID,
+				GID:             data.GID,
 				OperatingSystem: data.OperatingSystem,
 				Sleep:           iSleep,
 				Jitter:          data.Jitter,
 				Listener:        data.Listener,
+				FirstContact:    data.FirstContact,
 				LastCallBack:    time.Now(),
 				Tasks:           nil,
 			}

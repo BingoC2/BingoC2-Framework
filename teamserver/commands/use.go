@@ -300,6 +300,84 @@ func RegisterNewCommands(c *grumble.Context, agentid string) {
 			return deleteTask(agentid, c)
 		},
 	})
+
+	c.App.AddCommand(&grumble.Command{
+		Name: "info",
+		Help: "get basic info about the system",
+		Run: func(c *grumble.Context) error {
+			return SessionInfo(agentid, c)
+		},
+	})
+
+	c.App.AddCommand(&grumble.Command{
+		Name: "getuid",
+		Help: "get the uid",
+	})
+
+	c.App.AddCommand(&grumble.Command{
+		Name: "getgid",
+		Help: "get the gid",
+	})
+
+	c.App.AddCommand(&grumble.Command{
+		Name: "getpid",
+		Help: "get the current pid",
+	})
+
+	c.App.AddCommand(&grumble.Command{
+		Name: "mv",
+		Help: "move or rename file",
+	})
+
+	c.App.AddCommand(&grumble.Command{
+		Name: "cp",
+		Help: "copy file",
+	})
+
+	c.App.AddCommand(&grumble.Command{
+		Name: "netstat",
+		Help: "print network connection information",
+	})
+
+	c.App.AddCommand(&grumble.Command{
+		Name: "memdump",
+		Help: "dump the memory of a process",
+	})
+
+	c.App.AddCommand(&grumble.Command{
+		Name: "rm",
+		Help: "remove file or directory",
+	})
+
+	c.App.AddCommand(&grumble.Command{
+		Name: "mkdir",
+		Help: "make a directory",
+	})
+
+	c.App.AddCommand(&grumble.Command{
+		Name: "elevate",
+		Help: "use the elevated interactive token for the current user",
+	})
+
+	c.App.AddCommand(&grumble.Command{
+		Name: "impersonate",
+		Help: "impersonate a logged on user",
+	})
+
+	c.App.AddCommand(&grumble.Command{
+		Name: "tokens",
+		Help: "list accessable tokens",
+	})
+
+	c.App.AddCommand(&grumble.Command{
+		Name: "token-info",
+		Help: "get info about the current token",
+	})
+
+	c.App.AddCommand(&grumble.Command{
+		Name: "enable-privs",
+		Help: "enable all privileges for the current token",
+	})
 }
 
 func DeleteAllCommands(c *grumble.Context) {

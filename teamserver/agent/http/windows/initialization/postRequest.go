@@ -10,7 +10,11 @@ type httpPostInitRequest struct {
 	ProcessID       int      `json:"pid"`
 	ParentProcessID int      `json:"ppid"`
 	Username        string   `json:"username"`
+	UID             string   `json:"uid"`
+	GID             string   `json:"gid"`
 	OperatingSystem string   `json:"os"`
+	OSVersion       string   `json:"version"`
+	OSBuild         string   `json:"build"`
 	Sleep           int      `json:"sleep"`
 	Jitter          int      `json:"json"`
 	Listener        string   `json:"listener"`
