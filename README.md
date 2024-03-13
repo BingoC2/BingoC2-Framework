@@ -1,5 +1,6 @@
 # BingoC2-Framework
 BingoC2 is a Lightweight "Stage Zero" Command &amp; Control Adversary Emulation Framework
+Current Version: 0.1 beta (Bulldog)
 
 # Quick Start
 To get started, clone the repository and compile from source. See the [wiki](https://github.com/BingoC2/BingoC2-Framework/wiki/Getting-Started) for more detailed instructions.
