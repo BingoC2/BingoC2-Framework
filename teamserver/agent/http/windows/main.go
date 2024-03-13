@@ -2,6 +2,7 @@ package main
 
 import (
 	"dingo/check"
+	"dingo/hg"
 	"dingo/initialization"
 	"encoding/binary"
 	"fmt"
@@ -9,7 +10,6 @@ import (
 	"strconv"
 	"time"
 
-	hg "github.com/deranged0tter/hellsgopher"
 	"github.com/lthibault/jitterbug"
 )
 

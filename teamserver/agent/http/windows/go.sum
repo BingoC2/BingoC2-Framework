@@ -2,8 +2,6 @@ github.com/Binject/debug v0.0.0-20230508195519-26db73212a7a h1:4c0nc0krv8eh7gD80
 github.com/Binject/debug v0.0.0-20230508195519-26db73212a7a/go.mod h1:QzgxDLY/qdKlvnbnb65eqTedhvQPbaSP2NqIbcuKvsQ=
 github.com/BurntSushi/xgb v0.0.0-20210121224620-deaf085860bc h1:7D+Bh06CRPCJO3gr2F7h1sriovOZ8BMhca2Rg85c2nk=
 github.com/BurntSushi/xgb v0.0.0-20210121224620-deaf085860bc/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
-github.com/deranged0tter/hellsgopher v0.2.2 h1:/94+8Ie1YVKZuKH1ZXqvsveLbLbmvxNeAgYZ45r9v7Q=
-github.com/deranged0tter/hellsgopher v0.2.2/go.mod h1:XDP7Rq8LMHVAlJGOF7DRvbq4hceyIRANpl32T6dREdo=
 github.com/fourcorelabs/wintoken v1.0.0 h1:dskUYLAFHNy1cbS5MXsNFXauQzxieTrZlffQZ0Yu19I=
 github.com/fourcorelabs/wintoken v1.0.0/go.mod h1:jKyXHt079W09KwEMbUC9g+R2KDs5kVvSKPUiF5p0ejs=
 github.com/go-ping/ping v1.1.0 h1:3MCGhVX4fyEUuhsfwPrsEdQw6xspHkv5zHsiSoDFZYw=
@@ -12,6 +10,8 @@ github.com/google/uuid v1.2.0 h1:qJYtXnJRWmpe7m/3XlyhrsLrEURqHRM2kxzoxXqyUDs=
 github.com/google/uuid v1.2.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 github.com/lthibault/jitterbug v2.0.0+incompatible h1:qouq51IKzlMx25+15jbxhC/d79YyTj0q6XFoptNqaUw=
 github.com/lthibault/jitterbug v2.0.0+incompatible/go.mod h1:2l7akWd27PScEs6YkjyUVj/8hKgNhbbQ3KiJgJtlf6o=
+github.com/pbnjay/memory v0.0.0-20210728143218-7b4eea64cf58 h1:onHthvaw9LFnH4t2DcNVpwGmV9E1BkGknEliJkfwQj0=
+github.com/pbnjay/memory v0.0.0-20210728143218-7b4eea64cf58/go.mod h1:DXv8WO4yhMYhSNPKjeNKa5WY9YCIEBRbNzFFPJbWO6Y=
 github.com/secur30nly/go-self-delete v0.0.0-20230606091445-30ce22f496a0 h1:NZL0QyvYp9k160Bhv9afRYVl8/roNk7Eq9fbG0qZeEE=
 github.com/secur30nly/go-self-delete v0.0.0-20230606091445-30ce22f496a0/go.mod h1:yX1Xdo1I2SH7t3KgBD8Im7DeLGSg6xuQc0/KcK7Uecg=
 github.com/vova616/screenshot v0.0.0-20220801010501-56c10359473c h1:mqgl+NQgzZ30EX7oA3uNIlPn6dAgG6sThBiUodUzZpU=

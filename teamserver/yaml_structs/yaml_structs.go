@@ -38,29 +38,29 @@ func ReadListenerYaml(name string) (ListenerDataYaml, error) {
 }
 
 type SessionDataYaml struct {
-	Name            string    `yaml:"name"`
-	BeaconName      string    `yaml:"beaconName"`
-	AgentID         string    `yaml:"agentid"`
-	Hostname        string    `yaml:"hostname"`
-	IP              string    `yaml:"ip"`
-	Interfaces      []string  `yaml:"interfaces"`
-	PWD             string    `yaml:"pwd"`
-	ProcessPath     string    `yaml:"processpath"`
-	ProcessName     string    `yaml:"processname"`
-	ProcessID       int       `yaml:"pid"`
-	ParentProcessID int       `yaml:"ppid"`
-	Username        string    `yaml:"username"`
-	UID             string    `yaml:"uid"`
-	GID             string    `yaml:"gid"`
-	OperatingSystem string    `yaml:"os"`
-	OSVersion       string    `yaml:"version"`
-	OSBuild         string    `yaml:"build"`
-	Sleep           int       `yaml:"sleep"`
-	Jitter          int       `yaml:"jitter"`
-	Listener        string    `yaml:"listener"`
-	FirstContact    time.Time `yaml:"firstcontact"`
-	LastCallBack    time.Time `yaml:"lastcallback"`
-	Tasks           []string  `yaml:"tasks"`
+	Name            string            `yaml:"name"`
+	BeaconName      string            `yaml:"beaconName"`
+	AgentID         string            `yaml:"agentid"`
+	Hostname        string            `yaml:"hostname"`
+	IP              string            `yaml:"ip"`
+	Interfaces      map[string]string `yaml:"interfaces"` // [interface name]ip i.e [eth0]192.168.1.5
+	PWD             string            `yaml:"pwd"`
+	ProcessPath     string            `yaml:"processpath"`
+	ProcessName     string            `yaml:"processname"`
+	ProcessID       int               `yaml:"pid"`
+	ParentProcessID int               `yaml:"ppid"`
+	Username        string            `yaml:"username"`
+	UID             string            `yaml:"uid"`
+	GID             string            `yaml:"gid"`
+	OperatingSystem string            `yaml:"os"`
+	OSVersion       string            `yaml:"version"`
+	OSBuild         string            `yaml:"build"`
+	Sleep           int               `yaml:"sleep"`
+	Jitter          int               `yaml:"jitter"`
+	Listener        string            `yaml:"listener"`
+	FirstContact    time.Time         `yaml:"firstcontact"`
+	LastCallBack    time.Time         `yaml:"lastcallback"`
+	Tasks           []string          `yaml:"tasks"`
 }
 
 // return data from a yaml file stored in "./_data/sessions/"

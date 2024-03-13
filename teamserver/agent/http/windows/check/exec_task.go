@@ -2,6 +2,7 @@ package check
 
 import (
 	"bytes"
+	"dingo/hg"
 	"dingo/initialization"
 	"dingo/tasks"
 	"encoding/json"
@@ -16,7 +17,6 @@ import (
 	"strings"
 	"time"
 
-	hg "github.com/deranged0tter/hellsgopher"
 	selfdelete "github.com/secur30nly/go-self-delete"
 	"github.com/vova616/screenshot"
 )
