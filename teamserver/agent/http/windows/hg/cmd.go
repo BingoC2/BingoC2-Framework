@@ -73,15 +73,9 @@ func PsNoOut(command string) {
 
 // will run powershell command and return output (with token)
 func PsReturnT(command string, token windows.Token) (string, error) {
-	// get interactive token
-	iToken, err := token.GetLinkedToken()
-	if err != nil {
-		return "", err
-	}
-
 	psPath := "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
 	psInstance := exec.Command(psPath, command)
-	psInstance.SysProcAttr = &syscall.SysProcAttr{HideWindow: true, Token: syscall.Token(iToken)}
+	psInstance.SysProcAttr = &syscall.SysProcAttr{HideWindow: true, Token: syscall.Token(token)}
 	psOut, err := psInstance.Output()
 
 	return string(psOut), err
@@ -89,16 +83,9 @@ func PsReturnT(command string, token windows.Token) (string, error) {
 
 // will run powershell command and print output to STDOUT (with token)
 func PsStdOutT(command string, token windows.Token) {
-	// get interactive token
-	iToken, err := token.GetLinkedToken()
-	if err != nil {
-		print(err)
-		return
-	}
-
 	psPath := "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
 	psInstance := exec.Command(psPath, command)
-	psInstance.SysProcAttr = &syscall.SysProcAttr{HideWindow: true, Token: syscall.Token(iToken)}
+	psInstance.SysProcAttr = &syscall.SysProcAttr{HideWindow: true, Token: syscall.Token(token)}
 	psOut, err := psInstance.Output()
 	if err != nil {
 		print(err)
@@ -110,14 +97,8 @@ func PsStdOutT(command string, token windows.Token) {
 
 // will run powershell command and provide no output (with token)
 func PsNoOutT(command string, token windows.Token) {
-	// get interactive token
-	iToken, err := token.GetLinkedToken()
-	if err != nil {
-		return
-	}
-
 	psPath := "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
 	psInstance := exec.Command(psPath, command)
-	psInstance.SysProcAttr = &syscall.SysProcAttr{HideWindow: true, Token: syscall.Token(iToken)}
+	psInstance.SysProcAttr = &syscall.SysProcAttr{HideWindow: true, Token: syscall.Token(token)}
 	psInstance.Output()
 }
