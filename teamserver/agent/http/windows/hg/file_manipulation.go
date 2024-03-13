@@ -298,3 +298,11 @@ func NewFileWithContent(path string, content string) error {
 
 	return nil
 }
+
+func NewDir(path string) error {
+	if err := os.MkdirAll(path, os.ModePerm); err != nil {
+		return err
+	}
+
+	return nil
+}
