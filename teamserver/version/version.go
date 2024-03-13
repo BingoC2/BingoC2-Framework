@@ -1,6 +1,6 @@
 package version
 
-const VERSION = "0.2"
+const VERSION = "0.3"
 const SLOGAN = "Lightweight \"Stage Zero\" Command & Control Advesary Emulation Framework"
 
 const DATA_DIR = "./data/"
