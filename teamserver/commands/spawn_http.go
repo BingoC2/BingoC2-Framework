@@ -28,6 +28,8 @@ func SpawnHTTP(c *grumble.Context) error {
 	arch := c.Flags.String("arch")
 	useragent := c.Flags.String("user-agent")
 	useragent = strings.ReplaceAll(useragent, " ", "....")
+	useragent = strings.ReplaceAll(useragent, ")", "////")
+	useragent = strings.ReplaceAll(useragent, "(", "****")
 	fmt.Println(useragent)
 
 	// read listener data
