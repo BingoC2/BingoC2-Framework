@@ -27,7 +27,8 @@ func SpawnHTTP(c *grumble.Context) error {
 	opsys := c.Flags.String("os")
 	arch := c.Flags.String("arch")
 	useragent := c.Flags.String("user-agent")
-	useragent = strings.ReplaceAll(useragent, " ", "////")
+	useragent = strings.ReplaceAll(useragent, " ", "....")
+	fmt.Println(useragent)
 
 	// read listener data
 	file := version.LISTENER_DATA_DIR + listener + ".yaml"

