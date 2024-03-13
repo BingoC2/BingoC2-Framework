@@ -3,12 +3,15 @@ package commands
 import (
 	"bytes"
 	"fmt"
+	"os"
 	"strconv"
 	"text/tabwriter"
 
 	grumble "github.com/bingoc2/bingoc2-framework/teamserver/grumble_modified"
+	"github.com/bingoc2/bingoc2-framework/teamserver/logging"
 	"github.com/bingoc2/bingoc2-framework/teamserver/version"
 	yamlstructs "github.com/bingoc2/bingoc2-framework/teamserver/yaml_structs"
+	"gopkg.in/yaml.v3"
 )
 
 func ListTasks(c *grumble.Context) error {
@@ -52,4 +55,52 @@ func listTask(agentid string, c *grumble.Context) error {
 	c.App.Println(outputBuffer)
 
 	return nil
+}
+
+func deleteTask(agentid string, c *grumble.Context) error {
+	taskid := c.Args.Int("taskid")
+
+	sessionData, err := yamlstructs.ReadSessionYaml(agentid)
+	if err != nil {
+		return err
+	}
+
+	sessionData.Tasks = remove(sessionData.Tasks, taskid)
+
+	// write new data
+	newSessionsData := yamlstructs.SessionDataYaml{
+		Name:            sessionData.Name,
+		BeaconName:      sessionData.BeaconName,
+		AgentID:         agentid,
+		Hostname:        sessionData.Hostname,
+		IP:              sessionData.IP,
+		Interfaces:      sessionData.Interfaces,
+		PWD:             sessionData.PWD,
+		ProcessPath:     sessionData.ProcessPath,
+		ProcessName:     sessionData.ProcessName,
+		ProcessID:       sessionData.ProcessID,
+		ParentProcessID: sessionData.ParentProcessID,
+		Username:        sessionData.Username,
+		OperatingSystem: sessionData.OperatingSystem,
+		Sleep:           sessionData.Sleep,
+		Jitter:          sessionData.Jitter,
+		Listener:        sessionData.Listener,
+		LastCallBack:    sessionData.LastCallBack,
+		Tasks:           sessionData.Tasks,
+	}
+
+	yamlData, err := yaml.Marshal(&newSessionsData)
+	if err != nil {
+		return err
+	}
+
+	os.WriteFile(fmt.Sprintf(version.SESSION_DATA_DIR+"%s.yaml", agentid), yamlData, 0666)
+
+	logging.Okay("successfully removed task", c)
+
+	return nil
+}
+
+func remove(slice []string, s int) []string {
+	return append(slice[:s], slice[s+1:]...)
 }

@@ -227,7 +227,7 @@ func RegisterNewCommands(c *grumble.Context, agentid string) {
 
 	portFwdCmd := &grumble.Command{
 		Name: "portfwd",
-		Help: "forward a port",
+		Help: "manage port forwarding rules",
 	}
 	c.App.AddCommand(portFwdCmd)
 
@@ -276,11 +276,28 @@ func RegisterNewCommands(c *grumble.Context, agentid string) {
 		},
 	})
 
-	c.App.AddCommand(&grumble.Command{
+	taskCmd := &grumble.Command{
 		Name: "tasks",
+		Help: "manage tasks for the current session",
+	}
+	c.App.AddCommand(taskCmd)
+
+	taskCmd.AddCommand(&grumble.Command{
+		Name: "list",
 		Help: "view a list of tasks currently in queue",
 		Run: func(c *grumble.Context) error {
 			return listTask(agentid, c)
+		},
+	})
+
+	taskCmd.AddCommand(&grumble.Command{
+		Name: "del",
+		Help: "remove a task from queue",
+		Args: func(a *grumble.Args) {
+			a.Int("taskid", "id of task to remove")
+		},
+		Run: func(c *grumble.Context) error {
+			return deleteTask(agentid, c)
 		},
 	})
 }
