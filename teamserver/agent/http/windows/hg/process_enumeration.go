@@ -6,6 +6,7 @@ import (
 	"syscall"
 	"unsafe"
 
+	"github.com/shirou/gopsutil/v3/process"
 	"golang.org/x/sys/windows"
 )
 
@@ -127,6 +128,10 @@ func GetCurrentProcName() (string, error) {
 // get the arch of the current process
 func GetCurrentProcArch() string {
 	return runtime.GOARCH
+}
+
+func GetAllProcesses() ([]*process.Process, error) {
+	return process.Processes()
 }
 
 /*

