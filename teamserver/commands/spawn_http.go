@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 
 	bingo_errors "github.com/bingoc2/bingoc2-framework/teamserver/errors"
 	grumble "github.com/bingoc2/bingoc2-framework/teamserver/grumble_modified"
@@ -26,6 +27,7 @@ func SpawnHTTP(c *grumble.Context) error {
 	opsys := c.Flags.String("os")
 	arch := c.Flags.String("arch")
 	useragent := c.Flags.String("user-agent")
+	useragent = strings.ReplaceAll(useragent, " ", "////")
 
 	// read listener data
 	file := version.LISTENER_DATA_DIR + listener + ".yaml"
