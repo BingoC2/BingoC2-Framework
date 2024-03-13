@@ -2,6 +2,7 @@ package commands
 
 import (
 	"fmt"
+	"time"
 
 	grumble "github.com/bingoc2/bingoc2-framework/teamserver/grumble_modified"
 	yamlstructs "github.com/bingoc2/bingoc2-framework/teamserver/yaml_structs"
@@ -18,8 +19,8 @@ func SessionInfo(agentid string, c *grumble.Context) error {
 	c.App.Println("Agent ID :", sessionData.AgentID)
 	c.App.Println("Sleep :", sessionData.Sleep)
 	c.App.Println("Jitter :", sessionData.Jitter)
-	c.App.Println("First Contact :", sessionData.FirstContact)
-	c.App.Println("Last Callback :", sessionData.LastCallBack)
+	c.App.Println(fmt.Sprintf("First Contact : %s (%s seconds)", fmt.Sprint(sessionData.FirstContact.Format(time.ANSIC)), fmt.Sprint(time.Since(sessionData.FirstContact).Seconds())))
+	c.App.Println(fmt.Sprintf("Last Callback : %s (%s seconds)", fmt.Sprint(sessionData.LastCallBack.Format(time.ANSIC)), fmt.Sprint(time.Since(sessionData.LastCallBack).Seconds())))
 
 	c.App.Println("\n=== System Info ===")
 	c.App.Println("Hostname :", sessionData.Hostname)
