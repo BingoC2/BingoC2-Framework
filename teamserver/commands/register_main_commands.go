@@ -160,4 +160,15 @@ func RegisterMainCommands(app *grumble.App) {
 			return Use(c)
 		},
 	})
+
+	app.AddCommand(&grumble.Command{
+		Name: "tasks",
+		Help: "see tasks currently in queue for one/all sessions",
+		Args: func(a *grumble.Args) {
+			a.String("agentid", "id of agent to view tasks for (leave blank for all)", grumble.Default(""))
+		},
+		Run: func(c *grumble.Context) error {
+			return ListTasks(c)
+		},
+	})
 }

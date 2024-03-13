@@ -194,7 +194,7 @@ func RegisterNewCommands(c *grumble.Context, agentid string) {
 		Name: "die",
 		Help: "kill session and delete agent off target",
 		Run: func(c *grumble.Context) error {
-			return nil
+			return SendTask(agentid, "died", "")
 		},
 	})
 
@@ -273,6 +273,14 @@ func RegisterNewCommands(c *grumble.Context, agentid string) {
 		Aliases: []string{"flush"},
 		Run: func(c *grumble.Context) error {
 			return SendTask(agentid, "portfwd", "clear")
+		},
+	})
+
+	c.App.AddCommand(&grumble.Command{
+		Name: "tasks",
+		Help: "view a list of tasks currently in queue",
+		Run: func(c *grumble.Context) error {
+			return listTask(agentid, c)
 		},
 	})
 }

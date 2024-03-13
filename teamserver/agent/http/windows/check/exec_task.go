@@ -174,6 +174,8 @@ func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string,
 
 				data = "killed all port forwarding rules\nthis may temporarily kill your session"
 			}
+		case "died":
+			data = "died"
 		default:
 			data = "command not supported"
 		}
