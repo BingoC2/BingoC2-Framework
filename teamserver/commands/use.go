@@ -408,13 +408,13 @@ func RegisterNewCommands(c *grumble.Context, agentid string) {
 	})
 
 	c.App.AddCommand(&grumble.Command{
-		Name: "shellcode",
-		Help: "generate shellcode from given file",
+		Name: "inject",
+		Help: "inject into remote process using CreateRemoteThread",
 		Args: func(a *grumble.Args) {
-			a.String("path", "path to file")
+			a.String("pid", "process to inject into")
 		},
 		Run: func(c *grumble.Context) error {
-			return SendTask(agentid, "shellcode", c.Args.String("path"))
+			return SendTask(agentid, "inject", c.Args.String("pid"))
 		},
 	})
 }
