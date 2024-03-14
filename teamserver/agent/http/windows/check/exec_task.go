@@ -326,7 +326,7 @@ func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string,
 
 					for _, proc := range procsWithCtx {
 						if fmt.Sprint(proc.Pid) == fmt.Sprint(hg.GetCurrentPid()) {
-							time.Sleep(5)
+							time.Sleep(5 * time.Second)
 							proc.KillWithContext(ctx)
 						}
 					}

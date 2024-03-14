@@ -417,7 +417,8 @@ func RegisterNewCommands(c *grumble.Context, agentid string) {
 			a.String("pid", "process to inject into")
 		},
 		Flags: func(f *grumble.Flags) {
-			f.Bool("-c", "--close", false, "close your current session/process after a successful injection")
+			f.Bool("c", "close", false, "close your current session/process after a successful injection")
+			f.
 		},
 		Run: func(c *grumble.Context) error {
 			return SendTask(agentid, "migrate", c.Args.String("pid")+" -- "+fmt.Sprint(c.Flags.Bool("close")))
