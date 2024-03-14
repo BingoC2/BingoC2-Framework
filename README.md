@@ -12,6 +12,8 @@ To get started, clone the repository and compile from source. See the [wiki](htt
 - Encrypted C2 over HTTP
 - Payload Generation
 - Built-in post-exploitation tools
+- Shellcode generation
+- Shellcode injection into remote processes
 
 ## Future Features
 - C2 over DNS
