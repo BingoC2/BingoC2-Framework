@@ -22,6 +22,7 @@ func SpawnHTTP(c *grumble.Context) error {
 	path := c.Flags.String("path")
 	listener := c.Flags.String("listener")
 	rhost := c.Flags.String("rhost")
+	port := c.Flags.String("port")
 	sleep := c.Flags.Int("sleep")
 	jitter := c.Flags.Int("jitter")
 	opsys := c.Flags.String("os")
@@ -58,7 +59,14 @@ func SpawnHTTP(c *grumble.Context) error {
 		RHOST = rhost
 	}
 
-	RPORT := data.LPORT
+	// check for port
+	var RPORT string
+	if port == "" {
+		RPORT = data.LPORT
+	} else {
+		RPORT = port
+	}
+
 	URI := data.URI
 
 	// generate name

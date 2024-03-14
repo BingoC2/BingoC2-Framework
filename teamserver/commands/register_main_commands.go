@@ -63,9 +63,10 @@ func RegisterMainCommands(app *grumble.App) {
 		Name: "http",
 		Help: "spawn http beacon",
 		Flags: func(f *grumble.Flags) {
-			f.String("p", "path", "../../../bin/", "full path to spawn the beacon to")
+			f.String("P", "path", "../../../bin/", "full path to spawn the beacon to")
 			f.String("l", "listener", "", "name of the listener")
 			f.String("r", "rhost", "", "host to callback to; if left empty, will default to host specified in listener (does not work if listener is 0.0.0.0) (ex: domain.com)")
+			f.String("p", "port", "", "port to call back to; will override the listener port")
 			f.Int("s", "sleep", 5, "interval between callbacks")
 			f.Int("j", "jitter", 2, "range of random intervals for callback (ex: sleep is 5 and jitter is 2, beacon will callback between 3 and 7 seconds)")
 			f.String("o", "os", "windows", "operating system to compile beacon for (supports: windows, linux)")
