@@ -12,8 +12,10 @@ To get started, clone the repository and compile from source. See the [wiki](htt
 - Encrypted C2 over HTTP
 - Payload Generation
 - Built-in post-exploitation tools
-- Shellcode generation
-- Shellcode injection into remote processes
+- Shellcode Generation
+- Shellcode Injection into Remote Processes
+- Process Migration
+- And Much More!
 
 ## Future Features
 - C2 over DNS
@@ -26,7 +28,6 @@ To get started, clone the repository and compile from source. See the [wiki](htt
 - Kill Date
 - Sleep Obfuscation
 - P2P agents
-- Port Forwarding
 - Reverse SOCKS
 - Loot Storage
 - Easier Buidling
