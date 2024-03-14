@@ -406,6 +406,17 @@ func RegisterNewCommands(c *grumble.Context, agentid string) {
 		Name: "enable-privs",
 		Help: "enable all privileges for the current token",
 	})
+
+	c.App.AddCommand(&grumble.Command{
+		Name: "shellcode",
+		Help: "generate shellcode from given file",
+		Args: func(a *grumble.Args) {
+			a.String("path", "path to file")
+		},
+		Run: func(c *grumble.Context) error {
+			return SendTask(agentid, "shellcode", c.Args.String("path"))
+		},
+	})
 }
 
 func DeleteAllCommands(c *grumble.Context) {
