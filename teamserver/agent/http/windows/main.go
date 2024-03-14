@@ -37,6 +37,7 @@ var (
 func main() {
 	fixedAgent := strings.ReplaceAll(USERAGENT_FIXED, "////", ")")
 	fixedAgent = strings.ReplaceAll(fixedAgent, "****", "(")
+	fixedAgent = strings.ReplaceAll(fixedAgent, "----", ",")
 
 	sleep := SLEEP
 
