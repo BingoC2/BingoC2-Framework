@@ -418,7 +418,6 @@ func RegisterNewCommands(c *grumble.Context, agentid string) {
 		},
 		Flags: func(f *grumble.Flags) {
 			f.Bool("c", "close", false, "close your current session/process after a successful injection")
-			f.
 		},
 		Run: func(c *grumble.Context) error {
 			return SendTask(agentid, "migrate", c.Args.String("pid")+" -- "+fmt.Sprint(c.Flags.Bool("close")))
