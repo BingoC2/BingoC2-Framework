@@ -70,7 +70,7 @@ func RegisterMainCommands(app *grumble.App) {
 			f.Int("j", "jitter", 2, "range of random intervals for callback (ex: sleep is 5 and jitter is 2, beacon will callback between 3 and 7 seconds)")
 			f.String("o", "os", "windows", "operating system to compile beacon for (supports: windows, linux)")
 			f.String("a", "arch", "amd64", "architecture to compile beacon for (amd64, i386)")
-			f.String("u", "user-agent", "bingoc2/1.0", "user agent for agents to use")
+			f.String("u", "user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36", "user agent for agents to use")
 		},
 		Run: func(c *grumble.Context) error {
 			return SpawnHTTP(c)
