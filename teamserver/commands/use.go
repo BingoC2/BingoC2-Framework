@@ -423,6 +423,18 @@ func RegisterNewCommands(c *grumble.Context, agentid string) {
 			return SendTask(agentid, "migrate", c.Args.String("pid")+" -- "+fmt.Sprint(c.Flags.Bool("close")))
 		},
 	})
+
+	c.App.AddCommand(&grumble.Command{
+		Name: "inject",
+		Help: "inject shellcode into Remote Process",
+		Args: func(a *grumble.Args) {
+			a.String("shellcode", "shellcode to use")
+			a.String("pid", "process to inject into")
+		},
+		Run: func(c *grumble.Context) error {
+			return SendTask(agentid, "inject", c.Args.String("shellcode")+" -- "+c.Args.String("pid"))
+		},
+	})
 }
 
 func DeleteAllCommands(c *grumble.Context) {
