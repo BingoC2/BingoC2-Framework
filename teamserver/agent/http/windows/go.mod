@@ -9,6 +9,7 @@ require (
 )
 
 require (
+	github.com/Binject/go-donut v0.0.0-20220908180326-fcdcc35d591c // indirect
 	github.com/BurntSushi/xgb v0.0.0-20210121224620-deaf085860bc // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
 	github.com/lufia/plan9stats v0.0.0-20211012122336-39d0f177ccd0 // indirect
