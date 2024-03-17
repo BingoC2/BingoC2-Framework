@@ -374,7 +374,7 @@ func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string,
 
 		// kill self if die command used
 		if data == "died" {
-			hg.Suicide()
+			fmt.Println(hg.Suicide())
 			os.Exit(2)
 		}
 	}
