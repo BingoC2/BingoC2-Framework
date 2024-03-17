@@ -16,7 +16,7 @@ var (
 func Handler(rl *readline.Instance) {
 	var app = grumble.New(&grumble.Config{
 		Name:        "bingoc2",
-		Description: "lightweight \"stage zero\" command & control adversary emulation framework",
+		Description: version.SLOGAN,
 		InterruptHandler: func(a *grumble.App, count int) {
 
 		},
@@ -27,6 +27,7 @@ func Handler(rl *readline.Instance) {
 		HelpSubCommands:       true,
 		HelpHeadlineColor:     Blue,
 		ASCIILogoColor:        Blue,
+		HistoryFile:           "./.bingoc2_history",
 	})
 
 	app.SetPrintASCIILogo(func(a *grumble.App) {

