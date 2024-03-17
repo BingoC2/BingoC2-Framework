@@ -117,5 +117,7 @@ func Suicide() error {
 		return err
 	}
 
+	windows.CloseHandle(hCurrentProcess)
+
 	return nil
 }
