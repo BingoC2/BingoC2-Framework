@@ -388,8 +388,9 @@ func RegisterNewCommands(c *grumble.Context, agentid string) {
 	})
 
 	c.App.AddCommand(&grumble.Command{
-		Name: "impersonate",
-		Help: "impersonate a logged on user",
+		Name:      "impersonate",
+		Help:      "impersonate a logged on user",
+		HelpGroup: "Windows",
 	})
 
 	c.App.AddCommand(&grumble.Command{
@@ -398,16 +399,19 @@ func RegisterNewCommands(c *grumble.Context, agentid string) {
 		Run: func(c *grumble.Context) error {
 			return SendTask(agentid, "tokens", "list")
 		},
+		HelpGroup: "Windows",
 	})
 
 	c.App.AddCommand(&grumble.Command{
-		Name: "token-info",
-		Help: "get info about the current token",
+		Name:      "token-info",
+		Help:      "get info about the current token",
+		HelpGroup: "Windows",
 	})
 
 	c.App.AddCommand(&grumble.Command{
-		Name: "enable-privs",
-		Help: "enable all privileges for the current token",
+		Name:      "enable-privs",
+		Help:      "enable all privileges for the current token",
+		HelpGroup: "Windows",
 	})
 
 	c.App.AddCommand(&grumble.Command{
@@ -422,6 +426,7 @@ func RegisterNewCommands(c *grumble.Context, agentid string) {
 		Run: func(c *grumble.Context) error {
 			return SendTask(agentid, "migrate", c.Args.String("pid")+" -- "+fmt.Sprint(c.Flags.Bool("close")))
 		},
+		HelpGroup: "Windows",
 	})
 
 	c.App.AddCommand(&grumble.Command{
@@ -434,6 +439,7 @@ func RegisterNewCommands(c *grumble.Context, agentid string) {
 		Run: func(c *grumble.Context) error {
 			return SendTask(agentid, "inject", c.Args.String("shellcode")+" -- "+c.Args.String("pid"))
 		},
+		HelpGroup: "Windows",
 	})
 }
 
