@@ -6,5 +6,13 @@ import (
 )
 
 func PrintTimePretty(t time.Duration) string {
-	return fmt.Sprintf("%dh%dm%ds", int(t.Hours()), int(t.Minutes()), int(t.Seconds()))
+	hours := t.Hours()
+	t = t - time.Duration(hours*time.Hour.Hours())
+
+	minutes := t.Minutes()
+	t = t - time.Duration(minutes*time.Hour.Minutes())
+
+	seconds := t.Seconds()
+
+	return fmt.Sprintf("%dh%dm%ds", int(hours), int(minutes), int(seconds))
 }
