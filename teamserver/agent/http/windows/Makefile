@@ -18,13 +18,12 @@ KEYB=key
 KEYC=key
 KEYD=key
 
-http: 
+gohttp: 
 # set GOOS=${cGOOS} 
 # set GOARCH=${cGOARCH} 
 	
 
 # GOOS=${cGOOS} GOARCH=${cGOARCH} (put this infront of go build)
 	GOOS=${cGOOS} GOARCH=${cGOARCH} go build \
-	-ldflags "-X 'main.sSLEEP=${sSLEEP}' -X 'main.BEACON_NAME=${BEACON_NAME}' -X 'main.sKeya=${KEYA}' -X 'main.sKeyb=${KEYB}' -X 'main.sKeyc=${KEYC}' -X 'main.sKeyd=${KEYD}'-X 'main.sJITTER=${sJITTER}' -X 'main.RHOST=${RHOST}' -X 'main.LISTENER_NAME=${LISTENER_NAME}' -X 'main.USERAGENT=${USERAGENT}' -X 'main.URI=${URI}'c -H windowsgui -s -w" \
+	-ldflags "-X 'main.sSLEEP=${sSLEEP}' -X 'main.BEACON_NAME=${BEACON_NAME}' -X 'main.sKeya=${KEYA}' -X 'main.sKeyb=${KEYB}' -X 'main.sKeyc=${KEYC}' -X 'main.sKeyd=${KEYD}'-X 'main.sJITTER=${sJITTER}' -X 'main.RHOST=${RHOST}' -X 'main.LISTENER_NAME=${LISTENER_NAME}' -X 'main.USERAGENT=${USERAGENT}' -X 'main.URI=${URI}' -H windowsgui -s -w" \
 	-o ${SPAWN_PATH}${BINARY_NAME}
-
