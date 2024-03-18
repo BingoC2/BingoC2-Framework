@@ -13,4 +13,5 @@ var (
 	ErrInvalidArch      = errors.New("invalid arch specified")
 	ErrDeadSession      = errors.New("session has expired")
 	ErrInvalidPath      = errors.New("invalid path specified")
+	ErrDLLOnNonWindows  = errors.New("cannot create DLL agent for non-windows platform")
 )

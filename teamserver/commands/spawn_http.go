@@ -112,12 +112,10 @@ func SpawnHTTP(c *grumble.Context) error {
 	}
 	os.WriteFile(fmt.Sprintf(version.BEACON_DATA_DIR+"%s.yaml", name), yamlData, 0666)
 
-	spawnHTTP(path, listener, RHOST, sleep, jitter, opsys, arch, useragent, key, name, c, RPORT, URI)
-
-	return nil
+	return spawnHTTP(path, listener, RHOST, sleep, jitter, opsys, arch, useragent, key, name, c, RPORT, URI)
 }
 
-func spawnHTTP(path string, listener string, rhost string, sleep int, jitter int, opsys string, arch string, useragent string, key []byte, name string, c *grumble.Context, rport string, uri string) {
+func spawnHTTP(path string, listener string, rhost string, sleep int, jitter int, opsys string, arch string, useragent string, key []byte, name string, c *grumble.Context, rport string, uri string) error {
 	// build beacon
 	if opsys == "windows" {
 		name += ".exe"
@@ -140,11 +138,17 @@ func spawnHTTP(path string, listener string, rhost string, sleep int, jitter int
 
 	isDLL := c.Flags.Bool("isDLL")
 
-	if isDLL {
-		hellsgopher.CmdReturn(fmt.Sprintf("make -C ./agent/http/%s/ httpDLL BEACON_NAME=%s KEYA=\"%s\" KEYB=\"%s\" KEYC=\"%s\" KEYD=\"%s\" sSLEEP=%d sJITTER=%d RHOST=%s RPORT=%s LISTENER_NAME=%s USERAGENT=%s URI=%s BINARY_NAME=%s cGOOS=%s cGOARCH=%s SPAWN_PATH=%s", opsys, name, sKeyA, sKeyB, sKeyC, sKeyD, sleep, jitter, rhost, rport, listener, useragent, uri, name, opsys, arch, path))
+	if isDLL && opsys == "windows" {
+		name += ".dll"
+		opsys = "windows_dll"
+		hellsgopher.CmdReturn(fmt.Sprintf("make -C ./agent/http/%s/ BEACON_NAME=%s KEYA=\"%s\" KEYB=\"%s\" KEYC=\"%s\" KEYD=\"%s\" sSLEEP=%d sJITTER=%d RHOST=%s RPORT=%s LISTENER_NAME=%s USERAGENT=%s URI=%s BINARY_NAME=%s cGOOS=%s cGOARCH=%s SPAWN_PATH=%s", opsys, name, sKeyA, sKeyB, sKeyC, sKeyD, sleep, jitter, rhost, rport, listener, useragent, uri, name, opsys, arch, path))
+	} else if isDLL && opsys != "windows" {
+		return bingo_errors.ErrDLLOnNonWindows
 	} else {
-		hellsgopher.CmdReturn(fmt.Sprintf("make -C ./agent/http/%s/ http BEACON_NAME=%s KEYA=\"%s\" KEYB=\"%s\" KEYC=\"%s\" KEYD=\"%s\" sSLEEP=%d sJITTER=%d RHOST=%s RPORT=%s LISTENER_NAME=%s USERAGENT=%s URI=%s BINARY_NAME=%s cGOOS=%s cGOARCH=%s SPAWN_PATH=%s", opsys, name, sKeyA, sKeyB, sKeyC, sKeyD, sleep, jitter, rhost, rport, listener, useragent, uri, name, opsys, arch, path))
+		hellsgopher.CmdReturn(fmt.Sprintf("make -C ./agent/http/%s/ BEACON_NAME=%s KEYA=\"%s\" KEYB=\"%s\" KEYC=\"%s\" KEYD=\"%s\" sSLEEP=%d sJITTER=%d RHOST=%s RPORT=%s LISTENER_NAME=%s USERAGENT=%s URI=%s BINARY_NAME=%s cGOOS=%s cGOARCH=%s SPAWN_PATH=%s", opsys, name, sKeyA, sKeyB, sKeyC, sKeyD, sleep, jitter, rhost, rport, listener, useragent, uri, name, opsys, arch, path))
 	}
 
 	logging.Okay(fmt.Sprintf("Successfully generated beacon (%s)", name), c)
+
+	return nil
 }

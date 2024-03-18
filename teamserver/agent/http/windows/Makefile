@@ -28,8 +28,3 @@ http:
 	-ldflags "-X 'main.sSLEEP=${sSLEEP}' -X 'main.BEACON_NAME=${BEACON_NAME}' -X 'main.sKeya=${KEYA}' -X 'main.sKeyb=${KEYB}' -X 'main.sKeyc=${KEYC}' -X 'main.sKeyd=${KEYD}'-X 'main.sJITTER=${sJITTER}' -X 'main.RHOST=${RHOST}' -X 'main.LISTENER_NAME=${LISTENER_NAME}' -X 'main.USERAGENT=${USERAGENT}' -X 'main.URI=${URI}'c -H windowsgui -s -w" \
 	-o ${SPAWN_PATH}${BINARY_NAME}
 
-httpDLL:
-	GOOS=${cGOOS} GOARCH=${cGOARCH} go build \
-	-buildmode=c-archive \
-	-ldflags "-X 'main.sSLEEP=${sSLEEP}' -X 'main.BEACON_NAME=${BEACON_NAME}' -X 'main.sKeya=${KEYA}' -X 'main.sKeyb=${KEYB}' -X 'main.sKeyc=${KEYC}' -X 'main.sKeyd=${KEYD}'-X 'main.sJITTER=${sJITTER}' -X 'main.RHOST=${RHOST}' -X 'main.LISTENER_NAME=${LISTENER_NAME}' -X 'main.USERAGENT=${USERAGENT}' -X 'main.URI=${URI}'c -H windowsgui -s -w " \
-	-o ${SPAWN_PATH}${BINARY_NAME}
