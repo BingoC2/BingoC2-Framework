@@ -33,7 +33,6 @@ func SpawnHTTP(c *grumble.Context) error {
 	useragent = strings.ReplaceAll(useragent, "(", "****")
 	useragent = strings.ReplaceAll(useragent, ",", "----")
 	useragent = strings.ReplaceAll(useragent, ";", "++++")
-	fmt.Println(useragent)
 
 	// read listener data
 	file := version.LISTENER_DATA_DIR + listener + ".yaml"

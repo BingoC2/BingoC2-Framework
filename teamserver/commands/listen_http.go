@@ -168,7 +168,6 @@ func httpListenerHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if callType == "Init" {
-		fmt.Println(beaconName)
 		// pull key from beacon name
 		beaconData, err := yamlstructs.ReadBeaconYaml(beaconName)
 		if err != nil {
@@ -176,7 +175,6 @@ func httpListenerHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		key := beaconData.Key
-		fmt.Println(key)
 
 		// decrypt message
 		bodyBytesEncoded, err := io.ReadAll(r.Body)
