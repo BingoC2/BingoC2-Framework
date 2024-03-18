@@ -72,6 +72,7 @@ func RegisterMainCommands(app *grumble.App) {
 			f.String("o", "os", "windows", "operating system to compile beacon for (supports: windows, linux)")
 			f.String("a", "arch", "amd64", "architecture to compile beacon for (amd64, i386)")
 			f.String("u", "user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36", "user agent for agents to use")
+			f.Bool("d", "isDLL", false, "generate the agent as a DLL file")
 		},
 		Run: func(c *grumble.Context) error {
 			return SpawnHTTP(c)
