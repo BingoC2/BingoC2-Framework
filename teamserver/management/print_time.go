@@ -23,6 +23,7 @@ func PrintTimePretty(t time.Duration) string {
 
 	// subtract the number of minutes from seconds
 	seconds = seconds - float64(minutes)
+	fmt.Println(float64(minutes))
 	fmt.Println(seconds)
 
 	return fmt.Sprintf("%dh:%dm:%ds", hours, minutes, int(seconds))
